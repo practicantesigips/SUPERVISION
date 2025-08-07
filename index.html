@@ -1,33 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <base target="_top">
-  <?!= include('style'); ?>
+  <meta charset="UTF-8">
+  <title>Formulario VIGIMAN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Checklist de Supervisión</h1>
-  
-  <form id="formulario">
-    <label>Unidad:</label>
-    <select id="unidad" name="unidad"></select>
+  <h2>Checklist de Supervisión</h2>
+  <form id="formularioVigiman">
+    <label for="unidad">Unidad:</label>
+    <input type="text" id="unidad" name="unidad" required><br>
 
-    <label>Fecha:</label>
-    <input type="date" name="fecha" required>
+    <label for="fecha">Fecha de supervisión:</label>
+    <input type="date" id="fecha" name="fecha" required><br>
 
-    <label>Hora:</label>
-    <input type="time" name="hora" required>
+    <label for="hora">Hora de inicio:</label>
+    <input type="time" id="hora" name="hora" required><br>
 
-    <label>Ubicación:</label>
-    <input type="text" id="ubicacion" name="ubicacion" readonly required>
+    <label for="numero">Número de VIGIMAN:</label>
+    <input type="number" id="numero" name="numero" min="1" max="15" required><br>
 
-    <label>Número de Vigiman:</label>
-    <input type="number" id="numeroVigiman" min="1" max="15" required>
+    <button type="button" onclick="generarSubformularios()">Generar VIGIMAN</button>
 
-    <div id="vigimanes"></div>
+    <div id="subformularios"></div>
 
-    <button type="button" onclick="enviarDatos()">Guardar</button>
+    <button type="submit">Enviar</button>
   </form>
 
-  <?!= include('script'); ?>
+  <script src="script.js"></script>
 </body>
 </html>
