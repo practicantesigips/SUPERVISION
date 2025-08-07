@@ -58,7 +58,7 @@ function obtenerUbicacion(i) {
 document.getElementById("formularioVigiman").addEventListener("submit", function (e) {
   e.preventDefault();
   const formData = new FormData(this);
-  fetch("https://script.google.com/macros/s/AKfycbx.../exec", {
+  fetch("https://script.google.com/macros/s/AKfycbz3x0PXSy18HGKe7GLqkL6aDMXAj-fDza2Y1nT_7oGi6jkJ4JQcLaEIGhm59wOyIUUG/exec", {
     method: "POST",
     body: formData
   })
@@ -73,3 +73,4 @@ document.getElementById("formularioVigiman").addEventListener("submit", function
       alert("Error al enviar datos");
     });
 });
+
