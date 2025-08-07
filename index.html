@@ -2,22 +2,22 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Formulario Checklist</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Formulario con Ubicación y Foto</title>
 </head>
 <body>
-  <h1>Formulario de Registro</h1>
+  <h2>Checklist</h2>
+
   <form id="formulario">
     <label>Estado:</label>
-    <input type="text" name="estado" required><br>
+    <input type="text" name="estado" required><br><br>
 
     <label>Observaciones:</label>
-    <textarea name="observaciones"></textarea><br>
+    <textarea name="observaciones" required></textarea><br><br>
 
     <label>Ubicación:</label>
-    <input type="text" id="ubicacion" name="ubicacion" readonly>
-    <button type="button" onclick="obtenerUbicacion()">Obtener ubicación</button><br>
+    <button type="button" onclick="getLocation()">Obtener Ubicación</button><br>
+    <input type="text" name="latitud" id="latitud" readonly>
+    <input type="text" name="longitud" id="longitud" readonly><br><br>
 
     <label>Foto:</label>
     <input type="file" name="foto" accept="image/*" required><br><br>
@@ -27,6 +27,39 @@
 
   <p id="mensaje"></p>
 
-  <script src="script.js"></script>
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          document.getElementById("latitud").value = pos.coords.latitude;
+          document.getElementById("longitud").value = pos.coords.longitude;
+        }, function() {
+          alert("No se pudo obtener la ubicación.");
+        });
+      } else {
+        alert("Tu navegador no soporta geolocalización.");
+      }
+    }
+
+    document.getElementById("formulario").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+
+      fetch("https://script.google.com/macros/s/AKfycbyKCtlrYAPn9n1MSI7i50nMamOXKiz1xlM3qzOkREhTOh4MutPBCa3hmUp_e1coTRx1/exec", {
+        method: "POST",
+        body: data
+      })
+      .then(response => response.text())
+      .then(msg => {
+        document.getElementById("mensaje").innerText = msg;
+        form.reset();
+      })
+      .catch(error => {
+        document.getElementById("mensaje").innerText = "Error al enviar.";
+        console.error(error);
+      });
+    });
+  </script>
 </body>
 </html>
