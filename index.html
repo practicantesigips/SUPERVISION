@@ -1,34 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registro de Supervisión</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Supervisión</title>
 </head>
 <body>
-  <div class="container">
-    <h1>Registro de Supervisión</h1>
+  <h2>Formulario de Supervisión</h2>
+  <form id="formulario">
+    <label>Estado:</label><br>
+    <input type="text" name="estado" required><br><br>
 
-    <form id="formulario">
-      <label for="estado">Estado:</label>
-      <select id="estado" required>
-        <option value="">Seleccione</option>
-        <option value="Conforme">Conforme</option>
-        <option value="No Conforme">No Conforme</option>
-      </select>
+    <label>Observaciones:</label><br>
+    <textarea name="observaciones" required></textarea><br><br>
 
-      <label for="observaciones">Observaciones:</label>
-      <textarea id="observaciones" rows="3"></textarea>
+    <label>Foto:</label><br>
+    <input type="file" id="foto" accept="image/*" required><br><br>
 
-      <label for="foto">Foto:</label>
-      <input type="file" id="foto" accept="image/*" required />
-
-      <button type="submit">Enviar</button>
-    </form>
-  </div>
+    <button type="submit">Enviar</button>
+  </form>
 
   <script src="script.js"></script>
 </body>
 </html>
-
