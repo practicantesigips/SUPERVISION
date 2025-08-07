@@ -3,30 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Checklist con Ubicación y Fotos</title>
+  <title>Formulario Checklist</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Formulario de Checklist</h1>
-  <form id="checklistForm">
-    <label>Estado:
-      <select name="estado" required>
-        <option value="">Seleccione</option>
-        <option value="Correcto">Correcto</option>
-        <option value="Incorrecto">Incorrecto</option>
-      </select>
-    </label>
+  <h1>Formulario de Registro</h1>
+  <form id="formulario">
+    <label>Estado:</label>
+    <input type="text" name="estado" required><br>
 
-    <label>Observaciones:
-      <textarea name="observaciones"></textarea>
-    </label>
+    <label>Observaciones:</label>
+    <textarea name="observaciones"></textarea><br>
 
-    <label>Foto:
-      <input type="file" name="foto" accept="image/*" required>
-    </label>
+    <label>Ubicación:</label>
+    <input type="text" id="ubicacion" name="ubicacion" readonly>
+    <button type="button" onclick="obtenerUbicacion()">Obtener ubicación</button><br>
 
-    <input type="hidden" name="latitud" id="latitud">
-    <input type="hidden" name="longitud" id="longitud">
+    <label>Foto:</label>
+    <input type="file" name="foto" accept="image/*" required><br><br>
 
     <button type="submit">Enviar</button>
   </form>
