@@ -4,36 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Formulario Supervisión</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 500px;
-      margin: auto;
-    }
-
-    label, select, textarea, input, button {
-      display: block;
-      width: 100%;
-      margin-bottom: 15px;
-      font-size: 16px;
-    }
-
-    button {
-      padding: 10px;
-      background-color: #0288d1;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    #estado-envio {
-      font-weight: bold;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <div class="container">
@@ -57,47 +28,6 @@
     </form>
   </div>
 
-  <script>
-    const form = document.getElementById('formulario');
-    const estadoEnvio = document.getElementById('estado-envio');
-
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      estadoEnvio.textContent = "Enviando...";
-
-      const estado = document.getElementById('estado').value;
-      const observaciones = document.getElementById('observaciones').value;
-      const foto = document.getElementById('foto').files[0];
-
-      if (!foto) {
-        estadoEnvio.textContent = "Debes subir una foto.";
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('estado', estado);
-      formData.append('observaciones', observaciones);
-      formData.append('foto', foto);
-
-      try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbybtuEpn09hNubFoW3J9RLTXVxNplQPZnJid9G0QHsDJbpG89JbUXZisPUWbTsq6HHH/exec', {
-          method: 'POST',
-          body: formData
-        });
-
-        const resultado = await response.text();
-
-        if (response.ok) {
-          estadoEnvio.textContent = "Enviado correctamente.";
-          form.reset();
-        } else {
-          estadoEnvio.textContent = "Error en el envío: " + resultado;
-        }
-      } catch (error) {
-        estadoEnvio.textContent = "Error en la conexión.";
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
-
