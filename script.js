@@ -22,7 +22,7 @@ document.getElementById("formulario").addEventListener("submit", async function(
     estadoEnvio.textContent = "Enviando...";
 
     try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbzkMAkT2559rdobxVAwFad5sdTOr_Hzrw777xxJkOR_Dh-fwSvO8GMe4sZ23ueTtWzA/exec", {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbw7ACwH1tHZs112HDtGx5VqCUWuSaMKrlhOlOPWZRZtlgZV_wK-AnC1OX-kziguIVdh/exec", {
         method: "POST",
         body: formData,
       });
@@ -40,3 +40,4 @@ document.getElementById("formulario").addEventListener("submit", async function(
 
   reader.readAsDataURL(fotoInput.files[0]);
 });
+
