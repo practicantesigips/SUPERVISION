@@ -1,43 +1,75 @@
-document.getElementById("formulario").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const estado = document.getElementById("estado").value;
-  const observaciones = document.getElementById("observaciones").value;
-  const fotoInput = document.getElementById("foto");
+function generarSubformularios() {
+  const cantidad = parseInt(document.getElementById("numero").value);
+  const contenedor = document.getElementById("subformularios");
+  contenedor.innerHTML = "";
 
-  if (fotoInput.files.length === 0) {
-    alert("Debes subir una foto");
-    return;
+  for (let i = 1; i <= cantidad; i++) {
+    const div = document.createElement("fieldset");
+    div.innerHTML = `
+      <legend>VIGIMAN ${i}</legend>
+      <label>DNI: <input type="text" name="dni${i}" required></label><br>
+      <label>Nombre: <input type="text" name="nombre${i}"></label><br>
+      <label>Estatus SUCAMEC: 
+        <select name="sucamec${i}">
+          <option value="VIGENTE">VIGENTE</option>
+          <option value="VENCIDO">VENCIDO</option>
+          <option value="EN TRÁMITE">EN TRÁMITE</option>
+        </select>
+      </label><br>
+      <label>Capacitaciones: <input type="text" name="capacitaciones${i}"></label><br>
+      <label>Fotocheck correcto:
+        <select name="fotocheck${i}">
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </label><br>
+      <label>Uniforme correcto:
+        <select name="uniforme${i}">
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </label><br>
+      <label>Fotos: <input type="file" name="fotos${i}" multiple></label><br>
+      <label>Observaciones: <textarea name="observaciones${i}"></textarea></label><br>
+      <label>Ubicación: <input type="text" name="ubicacion${i}" readonly></label><br>
+    `;
+    contenedor.appendChild(div);
+    obtenerUbicacion(i);
   }
+}
 
-  const reader = new FileReader();
-  reader.onload = async function() {
-    const base64Foto = reader.result.split(",")[1]; // Quitamos "data:image/jpeg;base64,"
-
-    const formData = new FormData();
-    formData.append("estado", estado);
-    formData.append("observaciones", observaciones);
-    formData.append("foto", base64Foto);
-
-    const estadoEnvio = document.getElementById("estado-envio");
-    estadoEnvio.textContent = "Enviando...";
-
-    try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbw7ACwH1tHZs112HDtGx5VqCUWuSaMKrlhOlOPWZRZtlgZV_wK-AnC1OX-kziguIVdh/exec", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await response.json();
-      if (data.status === "success") {
-        estadoEnvio.textContent = "¡Enviado correctamente!";
-      } else {
-        estadoEnvio.textContent = "Error al enviar: " + data.message;
+function obtenerUbicacion(i) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        document.querySelector(`input[name="ubicacion${i}"]`).value =
+          pos.coords.latitude + "," + pos.coords.longitude;
+      },
+      (err) => {
+        console.error("Error obteniendo ubicación", err);
+        document.querySelector(`input[name="ubicacion${i}"]`).value = "No disponible";
       }
-    } catch (error) {
-      estadoEnvio.textContent = "Error de conexión: " + error.message;
-    }
-  };
+    );
+  } else {
+    document.querySelector(`input[name="ubicacion${i}"]`).value = "No soportado";
+  }
+}
 
-  reader.readAsDataURL(fotoInput.files[0]);
+document.getElementById("formularioVigiman").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  fetch("https://script.google.com/macros/s/AKfycbzG4zhBCk6b101eJxC8JPPzLiS2rZ05EHblqUrvIkfYnfYJnzbBUAS6FGCA2Bh6Nh25/exec", {
+    method: "POST",
+    body: formData
+  })
+    .then(res => res.text())
+    .then(data => {
+      alert("Datos enviados correctamente");
+      document.getElementById("formularioVigiman").reset();
+      document.getElementById("subformularios").innerHTML = "";
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error al enviar datos");
+    });
 });
-
