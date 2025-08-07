@@ -14,7 +14,7 @@ document.getElementById("formulario").addEventListener("submit", async function 
   formData.append("foto", fotoInput.files[0]);
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbybtuEpn09hNubFoW3J9RLTXVxNplQPZnJid9G0QHsDJbpG89JbUXZisPUWbTsq6HHH/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbzFSJwiEk1qY5qD6f5qqmtyAHyIG3G2HDZCwLP-Gn0_zOZl5n28dnuqL9X5aJMHxBw-/exec", {
       method: "POST",
       body: formData,
     });
@@ -30,3 +30,4 @@ document.getElementById("formulario").addEventListener("submit", async function 
     estadoEnvio.textContent = "Error de red o servidor: " + error;
   }
 });
+
