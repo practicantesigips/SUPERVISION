@@ -1,46 +1,49 @@
-const URL = 'https://script.google.com/macros/s/AKfycbyKCtlrYAPn9n1MSI7i50nMamOXKiz1xlM3qzOkREhTOh4MutPBCa3hmUp_e1coTRx1/exec'; // Cambia esto por tu URL de despliegue del Apps Script
-
 document.getElementById("formulario").addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const form = e.target;
-  const estado = form.estado.value;
-  const observaciones = form.observaciones.value;
-  const archivo = document.getElementById("foto").files[0];
+  const estado = document.getElementById("estado").value;
+  const observaciones = document.getElementById("observaciones").value;
+  const fotoInput = document.getElementById("foto");
+  const estadoEnvio = document.getElementById("estado-envio");
 
-  if (!archivo) {
-    alert("Selecciona una imagen.");
+  if (!fotoInput.files.length) {
+    estadoEnvio.textContent = "Por favor selecciona una foto.";
     return;
   }
 
-  // Obtener geolocalización
-  navigator.geolocation.getCurrentPosition(async function (position) {
-    const lat = position.coords.latitude;
-    const lng = position.coords.longitude;
+  estadoEnvio.textContent = "Obteniendo ubicación...";
+
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const latitud = position.coords.latitude;
+    const longitud = position.coords.longitude;
 
     const reader = new FileReader();
-    reader.onloadend = async function () {
-      const base64Foto = reader.result.split(',')[1];
+    reader.onload = async function () {
+      const base64Foto = reader.result;
 
       const formData = new FormData();
       formData.append("estado", estado);
       formData.append("observaciones", observaciones);
-      formData.append("latitud", lat);
-      formData.append("longitud", lng);
+      formData.append("latitud", latitud);
+      formData.append("longitud", longitud);
       formData.append("foto", base64Foto);
-      formData.append("foto_tipo", archivo.type);
 
-      const response = await fetch(URL, {
-        method: "POST",
-        body: formData
-      });
+      try {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbyKCtlrYAPn9n1MSI7i50nMamOXKiz1xlM3qzOkREhTOh4MutPBCa3hmUp_e1coTRx1/exec", {
+          method: "POST",
+          body: formData,
+        });
 
-      const result = await response.text();
-      alert(result);
+        const texto = await response.text();
+        estadoEnvio.textContent = texto;
+        document.getElementById("formulario").reset();
+      } catch (error) {
+        estadoEnvio.textContent = "Error al enviar: " + error.message;
+      }
     };
 
-    reader.readAsDataURL(archivo);
-  }, function (error) {
-    alert("No se pudo obtener la ubicación.");
+    reader.readAsDataURL(fotoInput.files[0]);
+  }, () => {
+    estadoEnvio.textContent = "No se pudo obtener la ubicación.";
   });
 });
