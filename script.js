@@ -1,47 +1,47 @@
-const form = document.getElementById('formulario');
-const mensaje = document.getElementById('mensaje');
+const URL_SCRIPT_WEB_APP = 'https://script.google.com/macros/s/AKfycbyKCtlrYAPn9n1MSI7i50nMamOXKiz1xlM3qzOkREhTOh4MutPBCa3hmUp_e1coTRx1/exec'; // reemplaza esto con tu URL real
 
-form.addEventListener('submit', async (e) => {
+document.getElementById("formulario").addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const formData = new FormData(form);
-  mensaje.textContent = "Enviando...";
+  const estado = document.getElementById("estado").value;
+  const observaciones = document.getElementById("observaciones").value;
+  const archivo = document.getElementById("foto").files[0];
 
-  try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbyKCtlrYAPn9n1MSI7i50nMamOXKiz1xlM3qzOkREhTOh4MutPBCa3hmUp_e1coTRx1/exec', {
-      method: 'POST',
-      body: formData
-    });
-
-    const result = await response.text();
-    mensaje.textContent = result;
-    form.reset();
-  } catch (error) {
-    mensaje.textContent = "Error al enviar: " + error;
-  }
-});
-
-function obtenerUbicacion() {
-  if (!navigator.geolocation) {
-    alert("Geolocalización no soportada");
+  if (!archivo) {
+    alert("Debe seleccionar una foto.");
     return;
   }
 
-  navigator.geolocation.getCurrentPosition((pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-    document.getElementById("ubicacion").value = `Lat: ${lat}, Lng: ${lng}`;
-    const hiddenLat = document.createElement("input");
-    hiddenLat.name = "latitud";
-    hiddenLat.type = "hidden";
-    hiddenLat.value = lat;
+  // Obtener ubicación
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
 
-    const hiddenLng = document.createElement("input");
-    hiddenLng.name = "longitud";
-    hiddenLng.type = "hidden";
-    hiddenLng.value = lng;
+    // Convertir a base64
+    const reader = new FileReader();
+    reader.onloadend = function () {
+      const base64image = reader.result.split(",")[1]; // quitamos el encabezado data:image/jpeg;base64,...
 
-    form.appendChild(hiddenLat);
-    form.appendChild(hiddenLng);
+      const formData = new FormData();
+      formData.append("estado", estado);
+      formData.append("observaciones", observaciones);
+      formData.append("latitud", lat);
+      formData.append("longitud", lng);
+      formData.append("foto", base64image);
+      formData.append("foto.type", archivo.type);
+
+      fetch(URL_SCRIPT_WEB_APP, {
+        method: "POST",
+        body: formData,
+      })
+        .then(res => res.text())
+        .then(data => alert(data))
+        .catch(err => alert("Error al enviar: " + err));
+    };
+
+    reader.readAsDataURL(archivo);
+  }, () => {
+    alert("No se pudo obtener la ubicación.");
   });
-}
+});
+
