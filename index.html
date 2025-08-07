@@ -2,24 +2,37 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario con Ubicación</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checklist con Ubicación y Fotos</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Formulario con Ubicación</h1>
-    <form id="ubicacionForm" method="POST" target="hidden_iframe" onsubmit="submitted=true;" action="https://docs.google.com/forms/d/e/1FAIpQLScyKXGp6w-9vMkl-5aQv4mGVZyp_yVbi2ku2JbVw_8WffY6xQ/formResponse">
-      <label for="nombre">Nombre:</label>
-      <input type="text" name="entry.123456" id="nombre" required>
+  <h1>Formulario de Checklist</h1>
+  <form id="checklistForm">
+    <label>Estado:
+      <select name="estado" required>
+        <option value="">Seleccione</option>
+        <option value="Correcto">Correcto</option>
+        <option value="Incorrecto">Incorrecto</option>
+      </select>
+    </label>
 
-      <label for="ubicacion">Ubicación actual:</label>
-      <input type="text" name="entry.654321" id="ubicacion" readonly required>
+    <label>Observaciones:
+      <textarea name="observaciones"></textarea>
+    </label>
 
-      <input type="submit" value="Enviar">
-    </form>
-    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-  </div>
+    <label>Foto:
+      <input type="file" name="foto" accept="image/*" required>
+    </label>
+
+    <input type="hidden" name="latitud" id="latitud">
+    <input type="hidden" name="longitud" id="longitud">
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <p id="mensaje"></p>
+
   <script src="script.js"></script>
 </body>
 </html>
