@@ -1,47 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <base target="_top">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisión VIGIMAN</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Formulario de Supervisión</h1>
-  <form id="supervisionForm">
-    <label>Unidad:</label>
-    <select id="unidad" name="unidad"></select>
+    <h1>Formulario de Supervisión VIGIMAN</h1>
 
-    <label>Fecha de Supervisión:</label>
-    <input type="text" id="fechaInicio" name="fechaInicio" readonly>
+    <form id="supervisionForm">
+        <label for="unidad">Unidad:</label>
+        <select id="unidad" name="unidad" required></select>
 
-    <label>Hora de Inicio:</label>
-    <input type="text" id="horaInicio" name="horaInicio" readonly>
+        <label for="fechaInicio">Fecha de Supervisión:</label>
+        <input type="text" id="fechaInicio" name="fechaInicio" readonly>
 
-    <label>Apellidos y Nombres del Supervisor:</label>
-    <input type="text" name="supervisor">
+        <label for="horaInicio">Hora de Inicio:</label>
+        <input type="text" id="horaInicio" name="horaInicio" readonly>
 
-    <label>DNI del Supervisor:</label>
-    <input type="text" name="dniSupervisor">
+        <label for="numVigiman">Número de VIGIMAN:</label>
+        <input type="number" id="numVigiman" name="numVigiman" min="1" max="15" required>
 
-    <label>Número de VIGIMAN:</label>
-    <input type="number" id="numVigiman" name="numVigiman" min="1" max="20">
-    <button type="button" id="btnGenerar">Generar Validación</button>
+        <div id="vigimanContainer"></div>
 
-    <div id="vigimanContainer"></div>
+        <button type="button" id="btnUbicacion">Cargar Ubicación</button>
+        <input type="hidden" id="ubicacion" name="ubicacion">
 
-    <label>Ubicación:</label>
-    <input type="text" id="ubicacion" name="ubicacion" readonly>
-    <button type="button" id="btnUbicacion">Cargar Ubicación</button>
+        <label for="horaFin">Hora de Fin:</label>
+        <input type="text" id="horaFin" name="horaFin" readonly>
+        <button type="button" id="btnFin">Finalizar Supervisión</button>
 
-    <label>Foto de Supervisión:</label>
-    <input type="file" name="fotoSupervision" accept="image/*" capture="camera">
+        <button type="submit">Enviar</button>
+    </form>
 
-    <label>Hora de Fin:</label>
-    <input type="text" id="horaFin" name="horaFin" readonly>
-    <button type="button" id="btnFin">Poner Hora Actual</button>
-
-    <button type="submit">Enviar</button>
-  </form>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
