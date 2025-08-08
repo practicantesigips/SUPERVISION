@@ -1,40 +1,43 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Supervisión</title>
+  <base target="_top">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Formulario de Supervisión</h1>
-
   <form id="supervisionForm">
     <label>Unidad:</label>
     <select id="unidad" name="unidad"></select>
 
-    <label>Fecha de supervisión:</label>
+    <label>Fecha de Supervisión:</label>
     <input type="text" id="fechaInicio" name="fechaInicio" readonly>
 
-    <label>Hora de inicio:</label>
+    <label>Hora de Inicio:</label>
     <input type="text" id="horaInicio" name="horaInicio" readonly>
 
-    <label>Número de Vigiman:</label>
-    <input type="number" id="numVigiman" name="numVigiman" min="1">
-    <button type="button" id="btnGenerar">Generar subformulario</button>
+    <label>Apellidos y Nombres del Supervisor:</label>
+    <input type="text" name="supervisor">
+
+    <label>DNI del Supervisor:</label>
+    <input type="text" name="dniSupervisor">
+
+    <label>Número de VIGIMAN:</label>
+    <input type="number" id="numVigiman" name="numVigiman" min="1" max="20">
+    <button type="button" id="btnGenerar">Generar Validación</button>
 
     <div id="vigimanContainer"></div>
 
     <label>Ubicación:</label>
     <input type="text" id="ubicacion" name="ubicacion" readonly>
-    <button type="button" id="btnUbicacion">Cargar ubicación</button>
+    <button type="button" id="btnUbicacion">Cargar Ubicación</button>
 
     <label>Foto de Supervisión:</label>
     <input type="file" name="fotoSupervision" accept="image/*" capture="camera">
 
-    <label>Hora de fin:</label>
+    <label>Hora de Fin:</label>
     <input type="text" id="horaFin" name="horaFin" readonly>
-    <button type="button" id="btnFin">Poner hora actual</button>
+    <button type="button" id="btnFin">Poner Hora Actual</button>
 
     <button type="submit">Enviar</button>
   </form>
