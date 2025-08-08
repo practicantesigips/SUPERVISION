@@ -1,39 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supervisión VIGIMAN</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Supervisión VIGIMAN</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <h1>Formulario de Supervisión VIGIMAN</h1>
+  <h1>Formulario de Supervisión VIGIMAN</h1>
 
-    <form id="supervisionForm">
-        <label for="unidad">Unidad:</label>
-        <select id="unidad" name="unidad" required></select>
+  <form id="supervisionForm">
+    <label for="unidad">Unidad:</label>
+    <select id="unidad" name="unidad" required>
+      <option value="">-- Seleccione Unidad --</option>
+    </select>
 
-        <label for="fechaInicio">Fecha de Supervisión:</label>
-        <input type="text" id="fechaInicio" name="fechaInicio" readonly>
+    <label for="fechaInicio">Fecha de Supervisión:</label>
+    <input type="text" id="fechaInicio" name="fechaInicio" readonly />
 
-        <label for="horaInicio">Hora de Inicio:</label>
-        <input type="text" id="horaInicio" name="horaInicio" readonly>
+    <label for="horaInicio">Hora de Inicio:</label>
+    <input type="text" id="horaInicio" name="horaInicio" readonly />
 
-        <label for="numVigiman">Número de VIGIMAN:</label>
-        <input type="number" id="numVigiman" name="numVigiman" min="1" max="15" required>
+    <label for="apellidosSupervisor">Apellidos y Nombres del Supervisor:</label>
+    <input type="text" id="apellidosSupervisor" name="apellidosSupervisor" required />
 
-        <div id="vigimanContainer"></div>
+    <label for="dniSupervisor">DNI del Supervisor:</label>
+    <input type="text" id="dniSupervisor" name="dniSupervisor" maxlength="8" required />
 
-        <button type="button" id="btnUbicacion">Cargar Ubicación</button>
-        <input type="hidden" id="ubicacion" name="ubicacion">
+    <label for="numVigiman">Número de VIGIMAN:</label>
+    <input type="number" id="numVigiman" name="numVigiman" min="1" max="15" required />
 
-        <label for="horaFin">Hora de Fin:</label>
-        <input type="text" id="horaFin" name="horaFin" readonly>
-        <button type="button" id="btnFin">Finalizar Supervisión</button>
+    <div id="vigimanContainer"></div>
 
-        <button type="submit">Enviar</button>
-    </form>
+    <button type="button" id="btnUbicacion">Cargar Ubicación</button>
+    <input type="hidden" id="ubicacion" name="ubicacion" />
 
-    <script src="script.js"></script>
+    <label for="horaFin">Hora de Fin:</label>
+    <input type="text" id="horaFin" name="horaFin" readonly />
+    <button type="button" id="btnFin">Finalizar Supervisión</button>
+
+    <button type="submit">Enviar Supervisión</button>
+  </form>
+
+  <script src="script.js"></script>
 </body>
 </html>
