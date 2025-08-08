@@ -1,9 +1,9 @@
-const apiUrl = "https://script.google.com/macros/s/AKfycbx0XvHKat-IyVWGvE_cp881vy_E79XOYn7igZdZE-vFk6UDyCHduqWJpBm5ePBSSOil/exec";
+const API_URL = 'https://script.google.com/macros/s/AKfycbxSg5yPOe7N9hVokL64uJb1dl4F9mLpnoiHp1QWxqrpz4EJN7Y7z3OjiW0LoOqpsqyg/exec';
 
 document.addEventListener("DOMContentLoaded", () => {
-  const hoy = new Date();
-  document.getElementById("fecha").value = hoy.toISOString().slice(0, 10);
-  document.getElementById("horaInicio").value = hoy.toTimeString().slice(0, 5);
+  const fecha = new Date();
+  document.getElementById("fecha").value = fecha.toISOString().split('T')[0];
+  document.getElementById("horaInicio").value = fecha.toTimeString().slice(0, 5);
 });
 
 function generarSubformularios() {
@@ -13,102 +13,144 @@ function generarSubformularios() {
 
   for (let i = 1; i <= cantidad; i++) {
     const fieldset = document.createElement("fieldset");
-    fieldset.innerHTML = `
-      <legend>VIGIMAN ${i}</legend>
-      <label for="dni${i}">DNI:</label>
-      <input type="text" id="dni${i}" name="dni${i}">
-      <button type="button" onclick="validarDni(${i})">Validar DNI</button><br>
+    const legend = document.createElement("legend");
+    legend.textContent = `VIGIMAN ${i}`;
+    fieldset.appendChild(legend);
 
-      <label for="nombre${i}">Nombre:</label>
-      <input type="text" id="nombre${i}" name="nombre${i}" readonly><br>
+    const dniLabel = document.createElement("label");
+    dniLabel.textContent = "DNI:";
+    const dniInput = document.createElement("input");
+    dniInput.type = "text";
+    dniInput.name = `dni${i}`;
+    dniInput.id = `dni${i}`;
+    dniInput.required = true;
 
-      <label for="estatus${i}">Estatus SUCAMEC:</label>
-      <input type="text" id="estatus${i}" name="estatus${i}" readonly>
-      <input type="file" name="fotoSUCAMEC${i}" accept="image/*" capture multiple><br>
+    const validarBtn = document.createElement("button");
+    validarBtn.textContent = "Validar DNI";
+    validarBtn.type = "button";
+    validarBtn.onclick = () => validarDNI(i);
 
-      <label for="capacitaciones${i}">Capacitaciones:</label>
-      <input type="text" id="capacitaciones${i}" name="capacitaciones${i}" readonly><br>
+    const nombre = crearInput(`nombre${i}`, "Nombre y Apellido", true);
+    const estatus = crearInput(`estatus${i}`, "Estatus SUCAMEC", true);
+    const capacitaciones = crearInput(`capacitaciones${i}`, "N° de Capacitaciones", true);
 
-      <label for="fotocheck${i}">Fotocheck:</label>
-      <input type="file" name="fotocheck${i}" accept="image/*" capture multiple><br>
+    const fotoEstatus = crearFile(`fotoEstatus${i}`, "Foto Estatus SUCAMEC");
+    const fotocheck = crearFile(`fotocheck${i}`, "Fotocheck");
+    const uniforme = crearFile(`uniforme${i}`, "Uniforme");
+    const observaciones = crearFile(`observaciones${i}`, "Observaciones");
 
-      <label for="uniforme${i}">Uniforme:</label>
-      <input type="file" name="uniforme${i}" accept="image/*" capture multiple><br>
+    fieldset.appendChild(dniLabel);
+    fieldset.appendChild(dniInput);
+    fieldset.appendChild(validarBtn);
+    fieldset.appendChild(nombre);
+    fieldset.appendChild(estatus);
+    fieldset.appendChild(capacitaciones);
+    fieldset.appendChild(fotoEstatus);
+    fieldset.appendChild(fotocheck);
+    fieldset.appendChild(uniforme);
+    fieldset.appendChild(observaciones);
 
-      <label for="observaciones${i}">Observaciones:</label>
-      <textarea id="observaciones${i}" name="observaciones${i}"></textarea>
-      <input type="file" name="observacionFoto${i}" accept="image/*" capture multiple><br>
-    `;
     contenedor.appendChild(fieldset);
   }
 }
 
-function validarDni(index) {
-  const dni = document.getElementById(`dni${index}`).value;
-  if (!dni) return alert("Ingrese un DNI");
+function crearInput(id, label, readonly = false) {
+  const container = document.createElement("div");
+  const lbl = document.createElement("label");
+  lbl.textContent = label;
+  const input = document.createElement("input");
+  input.type = "text";
+  input.id = id;
+  input.name = id;
+  if (readonly) input.readOnly = true;
+  container.appendChild(lbl);
+  container.appendChild(input);
+  return container;
+}
 
-  fetch(`${apiUrl}?dni=${dni}`)
+function crearFile(name, label) {
+  const container = document.createElement("div");
+  const lbl = document.createElement("label");
+  lbl.textContent = label;
+  const input = document.createElement("input");
+  input.type = "file";
+  input.name = name;
+  input.accept = "image/*";
+  input.multiple = true;
+  container.appendChild(lbl);
+  container.appendChild(input);
+  return container;
+}
+
+function validarDNI(index) {
+  const dni = document.getElementById(`dni${index}`).value;
+  if (!dni) return alert("Ingresa un DNI.");
+
+  fetch(`${API_URL}?dni=${dni}`)
     .then(res => res.json())
     .then(data => {
-      if (data.error) return alert("DNI no encontrado");
-      document.getElementById(`nombre${index}`).value = data.nombre;
-      document.getElementById(`estatus${index}`).value = data.estatus;
-      document.getElementById(`capacitaciones${index}`).value = data.capacitaciones;
-    })
-    .catch(err => alert("Error al buscar el DNI"));
+      if (data.error) return alert("DNI no encontrado.");
+      document.getElementById(`nombre${index}`).value = data.nombre || "";
+      document.getElementById(`estatus${index}`).value = data.estatus || "";
+      document.getElementById(`capacitaciones${index}`).value = data.capacitaciones || "";
+    });
 }
 
 function cargarUbicacion() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(pos => {
-      const coords = `${pos.coords.latitude},${pos.coords.longitude}`;
-      document.getElementById("ubicacion").value = coords;
-    }, () => alert("Error al obtener ubicación"));
-  } else {
-    alert("Geolocalización no soportada");
-  }
+  navigator.geolocation.getCurrentPosition(position => {
+    const coords = `${position.coords.latitude},${position.coords.longitude}`;
+    document.getElementById("ubicacion").value = coords;
+  }, () => {
+    alert("No se pudo obtener la ubicación.");
+  });
 }
 
 function cargarHoraFin() {
-  const ahora = new Date();
-  document.getElementById("horaFin").value = ahora.toTimeString().slice(0, 5);
+  const hora = new Date().toTimeString().slice(0, 5);
+  document.getElementById("horaFin").value = hora;
 }
 
 document.getElementById("formularioVigiman").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const form = e.target;
-  const data = {
-    unidad: form.unidad.value,
-    fecha: form.fecha.value,
-    horaInicio: form.horaInicio.value,
-    supervisorNombre: form.supervisorNombre.value,
-    supervisorDni: form.supervisorDni.value,
-    cantidad: parseInt(form.cantidad.value),
-    ubicacion: form.ubicacion.value,
-    horaFin: form.horaFin.value
-  };
+  const formData = new FormData(form);
+  const json = {};
 
-  for (let i = 1; i <= data.cantidad; i++) {
-    data[`dni${i}`] = form[`dni${i}`]?.value || "";
-    data[`nombre${i}`] = form[`nombre${i}`]?.value || "";
-    data[`estatus${i}`] = form[`estatus${i}`]?.value || "";
-    data[`capacitaciones${i}`] = form[`capacitaciones${i}`]?.value || "";
-    data[`observaciones${i}`] = form[`observaciones${i}`]?.value || "";
+  for (let [key, value] of formData.entries()) {
+    if (value instanceof FileList) {
+      json[key] = [];
+      for (let file of value) {
+        const base64 = await toBase64(file);
+        json[key].push(base64);
+      }
+    } else {
+      json[key] = value;
+    }
   }
 
-  const response = await fetch(apiUrl, {
+  const cantidad = parseInt(json.cantidad);
+  json.cantidad = cantidad;
+
+  fetch(API_URL, {
     method: "POST",
-    body: JSON.stringify(data),
+    body: JSON.stringify(json),
     headers: { "Content-Type": "application/json" }
-  });
-
-  const res = await response.json();
-  if (res.success) {
-    alert("Supervisión enviada con éxito.");
-    form.reset();
-  } else {
-    alert("Error al enviar el formulario.");
-  }
+  }).then(res => res.json())
+    .then(data => {
+      alert("Supervisión enviada correctamente.");
+      form.reset();
+    }).catch(err => {
+      console.error(err);
+      alert("Error al enviar.");
+    });
 });
 
+function toBase64(file) {
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = () => res(reader.result);
+    reader.onerror = err => rej(err);
+    reader.readAsDataURL(file);
+  });
+}
