@@ -99,7 +99,7 @@ document.getElementById("formulario").addEventListener("submit", async (e) => {
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
-  const response = await fetch("https://script.google.com/macros/s/AKfycbz3x0PXSy18HGKe7GLqkL6aDMXAj-fDza2Y1nT_7oGi6jkJ4JQcLaEIGhm59wOyIUUG/exec", {
+  const response = await fetch("https://script.google.com/macros/s/AKfycbx2uY6z-vv4cUdNMTnmDfn7wSbnZoISbWiLqkmLjC0a2Z0LHoXDd_WvjmWVEO_fnXV_/exec", {
     method: "POST",
     body: JSON.stringify(data)
   });
@@ -112,3 +112,4 @@ document.getElementById("formulario").addEventListener("submit", async (e) => {
     alert("Error al enviar formulario");
   }
 });
+
