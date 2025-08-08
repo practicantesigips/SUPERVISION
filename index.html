@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,16 +11,40 @@
   <h2>Checklist de Supervisión</h2>
   <form id="formularioVigiman">
     <label for="unidad">Unidad:</label>
-    <select id="unidad" name="unidad" required></select>
+    <input type="text" id="unidad" name="unidad" required><br>
 
-    <input type="hidden" id="fecha" name="fecha">
-    <input type="hidden" id="horaInicio" name="horaInicio">
+    <label for="fecha">Fecha de supervisión:</label>
+    <input type="date" id="fecha" name="fecha" readonly><br>
 
-    <label for="numero">Cantidad de VIGIMAN:</label>
-    <input type="number" id="numero" name="numero" min="1" max="15" required>
+    <label for="horaInicio">Hora de inicio:</label>
+    <input type="time" id="horaInicio" name="horaInicio" readonly><br>
 
+    <label for="supervisorNombre">Nombre del Supervisor:</label>
+    <input type="text" id="supervisorNombre" name="supervisorNombre" required><br>
+
+    <label for="supervisorDni">DNI del Supervisor:</label>
+    <input type="text" id="supervisorDni" name="supervisorDni" required><br>
+
+    <label for="cantidad">Cantidad de VIGIMAN:</label>
+    <input type="number" id="cantidad" name="cantidad" min="1" max="15" required>
     <button type="button" onclick="generarSubformularios()">Generar VIGIMAN</button>
+
     <div id="subformularios"></div>
+
+    <button type="button" onclick="cargarUbicacion()">Cargar Ubicación</button>
+    <div>
+      <label for="ubicacion">Coordenadas:</label>
+      <input type="text" id="ubicacion" name="ubicacion" readonly>
+    </div>
+
+    <div>
+      <label>Foto de Supervisión:</label>
+      <input type="file" name="fotoSupervision" accept="image/*" capture multiple>
+    </div>
+
+    <button type="button" onclick="cargarHoraFin()">Finalizar Supervisión</button>
+    <label for="horaFin">Hora de finalización:</label>
+    <input type="time" id="horaFin" name="horaFin" readonly><br>
 
     <button type="submit">Enviar Supervisión</button>
   </form>
