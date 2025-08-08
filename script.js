@@ -1,76 +1,114 @@
-function generarSubformularios() {
-  const cantidad = parseInt(document.getElementById("numero").value);
-  const contenedor = document.getElementById("subformularios");
-  contenedor.innerHTML = "";
+const unidadSelect = document.getElementById("unidad");
+const fechaInput = document.getElementById("fecha");
+const horaInicioInput = document.getElementById("horaInicio");
+const cantidadInput = document.getElementById("cantidad");
+const vigimanContainer = document.getElementById("vigiman-container");
+const ubicacionInput = document.getElementById("ubicacion");
+const horaFinInput = document.getElementById("horaFin");
+
+// Cargar unidades desde Google Sheets
+fetch("https://script.google.com/macros/s/AKfycbxTuJzRLG4cLZ6cVU7ZIGRxxmnyDwGskT4TTSQTP50/dev")
+  .then(res => res.json())
+  .then(data => {
+    unidadSelect.innerHTML = `<option value="">Seleccione...</option>`;
+    data.unidades.forEach(u => {
+      unidadSelect.innerHTML += `<option value="${u}">${u}</option>`;
+    });
+  });
+
+window.onload = () => {
+  const hoy = new Date();
+  fechaInput.value = hoy.toISOString().split("T")[0];
+  horaInicioInput.value = hoy.toTimeString().slice(0, 5);
+};
+
+cantidadInput.addEventListener("change", () => {
+  const cantidad = parseInt(cantidadInput.value);
+  vigimanContainer.innerHTML = "";
 
   for (let i = 1; i <= cantidad; i++) {
-    const div = document.createElement("fieldset");
+    const div = document.createElement("div");
+    div.classList.add("vigiman-form");
+
     div.innerHTML = `
-      <legend>VIGIMAN ${i}</legend>
-      <label>DNI: <input type="text" name="dni${i}" required></label><br>
-      <label>Nombre: <input type="text" name="nombre${i}"></label><br>
-      <label>Estatus SUCAMEC: 
-        <select name="sucamec${i}">
-          <option value="VIGENTE">VIGENTE</option>
-          <option value="VENCIDO">VENCIDO</option>
-          <option value="EN TRÁMITE">EN TRÁMITE</option>
-        </select>
-      </label><br>
-      <label>Capacitaciones: <input type="text" name="capacitaciones${i}"></label><br>
-      <label>Fotocheck correcto:
-        <select name="fotocheck${i}">
-          <option value="Sí">Sí</option>
-          <option value="No">No</option>
-        </select>
-      </label><br>
-      <label>Uniforme correcto:
-        <select name="uniforme${i}">
-          <option value="Sí">Sí</option>
-          <option value="No">No</option>
-        </select>
-      </label><br>
-      <label>Fotos: <input type="file" name="fotos${i}" multiple></label><br>
-      <label>Observaciones: <textarea name="observaciones${i}"></textarea></label><br>
-      <label>Ubicación: <input type="text" name="ubicacion${i}" readonly></label><br>
+      <h3>VIGIMAN ${i}</h3>
+      <label>DNI:</label>
+      <input type="text" name="dni${i}" required onblur="autocompletarDatos(this, ${i})" />
+
+      <label>Nombre:</label>
+      <input type="text" name="nombre${i}" readonly />
+
+      <label>Estatus SUCAMEC:</label>
+      <input type="text" name="estatus${i}" readonly />
+      <label>Foto SUCAMEC:</label>
+      <input type="file" name="fotoSUCAMEC${i}" accept="image/*" capture="environment" />
+
+      <label>Capacitaciones:</label>
+      <input type="text" name="capacitaciones${i}" readonly />
+
+      <label>Fotocheck:</label>
+      <input type="file" name="fotocheck${i}" accept="image/*" capture="environment" />
+
+      <label>Uniforme:</label>
+      <input type="file" name="uniforme${i}" accept="image/*" capture="environment" />
+
+      <label>Foto Supervisión:</label>
+      <input type="file" name="fotoSupervision${i}" accept="image/*" capture="environment" />
+
+      <label>Observaciones:</label>
+      <textarea name="observaciones${i}"></textarea>
     `;
-    contenedor.appendChild(div);
-    obtenerUbicacion(i);
+    vigimanContainer.appendChild(div);
   }
-}
-
-function obtenerUbicacion(i) {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        document.querySelector(`input[name="ubicacion${i}"]`).value =
-          pos.coords.latitude + "," + pos.coords.longitude;
-      },
-      (err) => {
-        console.error("Error obteniendo ubicación", err);
-        document.querySelector(`input[name="ubicacion${i}"]`).value = "No disponible";
-      }
-    );
-  } else {
-    document.querySelector(`input[name="ubicacion${i}"]`).value = "No soportado";
-  }
-}
-
-document.getElementById("formularioVigiman").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const formData = new FormData(this);
-  fetch("https://script.google.com/macros/s/AKfycbz3x0PXSy18HGKe7GLqkL6aDMXAj-fDza2Y1nT_7oGi6jkJ4JQcLaEIGhm59wOyIUUG/exec", {
-    method: "POST",
-    body: formData
-  })
-    .then(res => res.text())
-    .then(data => {
-      alert("Datos enviados correctamente");
-      document.getElementById("formularioVigiman").reset();
-      document.getElementById("subformularios").innerHTML = "";
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Error al enviar datos");
-    });
 });
 
+function autocompletarDatos(input, index) {
+  const dni = input.value;
+  if (dni.length !== 8) return;
+
+  fetch("https://script.google.com/macros/s/AKfycbxTuJzRLG4cLZ6cVU7ZIGRxxmnyDwGskT4TTSQTP50/dev?dni=" + dni)
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) return;
+      document.querySelector(`[name='nombre${index}']`).value = data.nombre || "";
+      document.querySelector(`[name='estatus${index}']`).value = data.estatus || "";
+      document.querySelector(`[name='capacitaciones${index}']`).value = data.capacitaciones || "";
+    });
+}
+
+function obtenerUbicacion() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const coords = pos.coords.latitude + "," + pos.coords.longitude;
+      ubicacionInput.value = coords;
+    }, err => {
+      alert("Error al obtener ubicación");
+    });
+  } else {
+    alert("Tu navegador no soporta geolocalización.");
+  }
+}
+
+function registrarHoraFin() {
+  const ahora = new Date();
+  horaFinInput.value = ahora.toTimeString().slice(0, 5);
+}
+
+document.getElementById("formulario").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+
+  const response = await fetch("https://script.google.com/macros/s/AKfycbz3x0PXSy18HGKe7GLqkL6aDMXAj-fDza2Y1nT_7oGi6jkJ4JQcLaEIGhm59wOyIUUG/exec", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+
+  const result = await response.json();
+  if (result.success) {
+    alert("Formulario enviado correctamente");
+    location.reload();
+  } else {
+    alert("Error al enviar formulario");
+  }
+});
