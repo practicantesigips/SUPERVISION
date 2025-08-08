@@ -7,32 +7,29 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Supervisión VIGIMAN</h1>
+    <h1>Formulario de Supervisión VIGIMAN</h1>
 
     <form id="supervisionForm">
-        <label>Unidad:</label>
+        <label for="unidad">Unidad:</label>
         <select id="unidad" name="unidad" required></select>
 
-        <label>Fecha:</label>
-        <input type="text" id="fecha" name="fecha" readonly>
+        <label for="fechaInicio">Fecha de Supervisión:</label>
+        <input type="text" id="fechaInicio" name="fechaInicio" readonly>
 
-        <label>Hora de inicio:</label>
+        <label for="horaInicio">Hora de Inicio:</label>
         <input type="text" id="horaInicio" name="horaInicio" readonly>
 
-        <label>Número de VIGIMAN:</label>
-        <input type="number" id="numVigiman" min="1" max="15" required>
-
-        <button type="button" id="generarForm">Generar VIGIMAN</button>
+        <label for="numVigiman">Número de VIGIMAN:</label>
+        <input type="number" id="numVigiman" name="numVigiman" min="1" max="15" required>
 
         <div id="vigimanContainer"></div>
 
-        <label>Ubicación:</label>
-        <input type="text" id="ubicacion" name="ubicacion" readonly>
-        <button type="button" id="btnUbicacion">Obtener ubicación</button>
+        <button type="button" id="btnUbicacion">Cargar Ubicación</button>
+        <input type="hidden" id="ubicacion" name="ubicacion">
 
-        <label>Hora fin:</label>
+        <label for="horaFin">Hora de Fin:</label>
         <input type="text" id="horaFin" name="horaFin" readonly>
-        <button type="button" id="btnHoraFin">Finalizar Supervisión</button>
+        <button type="button" id="btnFin">Finalizar Supervisión</button>
 
         <button type="submit">Enviar</button>
     </form>
