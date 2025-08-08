@@ -1,110 +1,111 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbyWJjBvI-SpGUTRKUxA5NXRju77FjYCFYi3r_BhbyRZqRzzMc4nKQDnpvETY1HJD8Qd/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxELsampRHSI0IJer3Tn9DVAlWnwEdWpiuvD4ypWc5mUNbS56C0qj-zfrOjUY8vIwQF/exec";
 
+// Cargar fecha y hora inicio
 window.onload = () => {
-  const fechaInput = document.getElementById("fecha");
-  const horaInicioInput = document.getElementById("horaInicio");
-
-  const now = new Date();
-  fechaInput.value = now.toISOString().split("T")[0];
-  horaInicioInput.value = now.toTimeString().split(":").slice(0, 2).join(":");
+    const hoy = new Date();
+    document.getElementById("fechaInicio").value = hoy.toISOString().split("T")[0];
+    document.getElementById("horaInicio").value = hoy.toTimeString().slice(0,5);
+    cargarUnidades();
 };
 
-function generarSubformularios() {
-  const cantidad = document.getElementById("cantidad").value;
-  const container = document.getElementById("subformularios");
-  container.innerHTML = "";
-
-  for (let i = 1; i <= cantidad; i++) {
-    const div = document.createElement("div");
-    div.innerHTML = `
-      <h4>VIGIMAN ${i}</h4>
-      <label>DNI:</label>
-      <input type="text" name="dni${i}" id="dni${i}">
-      <button type="button" onclick="validarDni(${i})">Validar DNI</button>
-      
-      <label>Nombre:</label>
-      <input type="text" name="nombre${i}" id="nombre${i}" readonly>
-
-      <label>Estatus SUCAMEC:</label>
-      <input type="text" name="estatus${i}" id="estatus${i}" readonly>
-      <input type="file" name="fotoEstatus${i}" accept="image/*" capture>
-
-      <label>Capacitaciones:</label>
-      <input type="text" name="capacitaciones${i}" id="capacitaciones${i}" readonly>
-
-      <label>Fotocheck:</label>
-      <input type="file" name="fotocheck${i}" accept="image/*" capture>
-
-      <label>Uniforme:</label>
-      <input type="file" name="uniforme${i}" accept="image/*" capture>
-
-      <label>Observaciones:</label>
-      <textarea name="observaciones${i}"></textarea>
-      <input type="file" name="fotoObservaciones${i}" accept="image/*" capture>
-    `;
-    container.appendChild(div);
-  }
+function cargarUnidades() {
+    fetch(`${API_URL}?action=getUnidades`)
+        .then(res => res.json())
+        .then(data => {
+            const select = document.getElementById("unidad");
+            data.forEach(u => {
+                let opt = document.createElement("option");
+                opt.value = u;
+                opt.textContent = u;
+                select.appendChild(opt);
+            });
+        });
 }
 
-async function validarDni(i) {
-  const dni = document.getElementById(`dni${i}`).value;
-
-  try {
-    const response = await fetch(`${API_URL}?dni=${dni}`);
-    const data = await response.json();
-
-    if (data.nombre) {
-      document.getElementById(`nombre${i}`).value = data.nombre;
-      document.getElementById(`estatus${i}`).value = data.estatus;
-      document.getElementById(`capacitaciones${i}`).value = data.capacitaciones;
-    } else {
-      alert("DNI no encontrado");
+document.getElementById("cantidadVigiman").addEventListener("change", function() {
+    const container = document.getElementById("vigimanContainer");
+    container.innerHTML = "";
+    for (let i = 1; i <= this.value; i++) {
+        container.appendChild(crearFormularioVigiman(i));
     }
-  } catch (error) {
-    alert("Error al validar DNI");
-  }
-}
-
-function cargarUbicacion() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-        document.getElementById("ubicacion").value = `${lat},${lon}`;
-      },
-      () => alert("No se pudo obtener ubicación")
-    );
-  } else {
-    alert("GPS no soportado en este navegador");
-  }
-}
-
-function cargarHoraFin() {
-  const now = new Date();
-  document.getElementById("horaFin").value = now.toTimeString().split(":").slice(0, 2).join(":");
-}
-
-document.getElementById("formularioVigiman").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData(document.getElementById("formularioVigiman"));
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      body: formData,
-    });
-
-    const result = await response.json();
-    if (result.success) {
-      alert("Supervisión enviada exitosamente");
-      location.reload();
-    } else {
-      alert("Error al enviar supervisión");
-    }
-  } catch (err) {
-    alert("Error en el envío");
-  }
 });
 
+function crearFormularioVigiman(num) {
+    const div = document.createElement("div");
+    div.classList.add("vigiman-section");
+    div.innerHTML = `
+        <h3>VIGIMAN ${num}</h3>
+        <label>DNI:</label>
+        <input type="text" name="dni${num}" maxlength="8" required onblur="validarDNI(this, ${num})">
+        
+        <label>Nombre:</label>
+        <input type="text" name="nombre${num}" readonly>
 
+        <label>Estatus SUCAMEC:</label>
+        <input type="text" name="estatus${num}" readonly>
+
+        <label>Capacitaciones:</label>
+        <input type="text" name="capacitaciones${num}" readonly>
+
+        <label>Fotocheck:</label>
+        <input type="file" name="fotocheck${num}" accept="image/*" multiple>
+
+        <label>Uniforme:</label>
+        <input type="file" name="uniforme${num}" accept="image/*" multiple>
+
+        <label>Foto de Supervisión:</label>
+        <input type="file" name="fotosupervision${num}" accept="image/*" multiple>
+
+        <label>Observaciones:</label>
+        <textarea name="observaciones${num}"></textarea>
+
+        <label>Ubicación:</label>
+        <input type="text" name="ubicacion${num}" readonly>
+        <button type="button" onclick="capturarUbicacion(${num})">Cargar Ubicación</button>
+    `;
+    return div;
+}
+
+function validarDNI(input, num) {
+    const dni = input.value.trim();
+    if (dni.length !== 8) return;
+    fetch(`${API_URL}?action=validarDNI&dni=${dni}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data) {
+                document.querySelector(`[name="nombre${num}"]`).value = data.nombre;
+                document.querySelector(`[name="estatus${num}"]`).value = data.estatus;
+                document.querySelector(`[name="capacitaciones${num}"]`).value = data.capacitaciones;
+            } else {
+                alert("DNI no encontrado");
+            }
+        });
+}
+
+function capturarUbicacion(num) {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+            const coords = `${pos.coords.latitude}, ${pos.coords.longitude}`;
+            document.querySelector(`[name="ubicacion${num}"]`).value = coords;
+        });
+    } else {
+        alert("La geolocalización no está soportada en este navegador.");
+    }
+}
+
+document.getElementById("btnFin").addEventListener("click", () => {
+    const ahora = new Date();
+    document.getElementById("horaFin").value = ahora.toTimeString().slice(0,5);
+});
+
+document.getElementById("supervisionForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch(API_URL, { method: "POST", body: formData })
+        .then(res => res.text())
+        .then(msg => {
+            alert("Supervisión registrada correctamente");
+            this.reset();
+        })
+        .catch(err => console.error(err));
+});
