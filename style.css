@@ -1,46 +1,43 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    padding: 20px;
+:root{
+  --bg:#f4f6f8;
+  --card:#fff;
+  --accent:#007bff;
+  --muted:#666;
 }
-
-form {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    max-width: 600px;
-    margin: auto;
+*{box-sizing:border-box}
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  margin:0;
+  padding:20px;
 }
-
-label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
+main{
+  max-width:900px;
+  margin:0 auto;
 }
-
-input, select, textarea, button {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    box-sizing: border-box;
+h1{text-align:center;margin-bottom:18px}
+form{
+  background:var(--card);
+  padding:18px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.06);
 }
-
-.vigiman-section {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 15px;
-    background: #f9f9f9;
-    border-radius: 4px;
+.form-group{
+  display:flex;
+  flex-direction:column;
+  margin-bottom:12px;
 }
-
-button {
-    background: #28a745;
-    color: white;
-    border: none;
-    margin-top: 10px;
-    cursor: pointer;
+label{font-weight:600;margin-bottom:6px;color:#222}
+input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea{
+  padding:8px;border-radius:6px;border:1px solid #d0d7de;font-size:14px;
 }
-
-button:hover {
-    background: #218838;
+textarea{min-height:70px;resize:vertical;padding-top:8px}
+.vigiman-card{border:1px solid #e2e8f0;background:#fafafa;padding:10px;border-radius:6px;margin-bottom:12px}
+.vigiman-card h3{margin:0 0 8px 0;font-size:16px}
+.small-btn{width:auto;padding:6px 10px;border-radius:6px;border:none;background:var(--accent);color:white;cursor:pointer}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+button{cursor:pointer}
+#mensaje{margin-top:12px;color:var(--muted)}
+@media (max-width:600px){
+  form{padding:14px}
 }
