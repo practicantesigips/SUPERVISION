@@ -1,47 +1,41 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background: #f7f7f7;
+    background-color: #f4f4f4;
 }
 
 form {
     background: #fff;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 
 label {
     display: block;
     margin-top: 10px;
-    font-weight: bold;
 }
 
-input, select, button {
+input, select, button, textarea {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
-    box-sizing: border-box;
 }
 
 button {
-    background: #007bff;
+    background-color: #007BFF;
     color: white;
     border: none;
-    cursor: pointer;
     margin-top: 10px;
+    cursor: pointer;
 }
 
 button:hover {
-    background: #0056b3;
+    background-color: #0056b3;
 }
 
-.vigiman-card {
-    background: #eef;
+.vigiman-block {
+    border: 1px solid #ccc;
     padding: 10px;
-    margin-top: 10px;
-    border-radius: 6px;
-}
-
-.vigiman-card h3 {
-    margin: 0 0 10px;
+    margin-top: 15px;
+    background: #fafafa;
 }
