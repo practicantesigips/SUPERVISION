@@ -1,31 +1,23 @@
 body {
   font-family: Arial, sans-serif;
-  margin: 15px;
+  margin: 20px;
 }
-
 form {
-  max-width: 800px;
-  margin: auto;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  max-width: 1000px;
 }
-
 label {
   display: block;
   margin-top: 10px;
-  font-weight: bold;
 }
-
-input, select, textarea, button {
+input, select, button {
+  margin-top: 4px;
   width: 100%;
-  padding: 8px;
-  margin-top: 5px;
+  padding: 5px;
   box-sizing: border-box;
 }
-
-.vigiman-form {
+fieldset {
   margin-top: 20px;
-  border-top: 2px dashed #aaa;
-  padding-top: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
 }
