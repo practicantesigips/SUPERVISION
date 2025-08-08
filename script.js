@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbx-CsVyZeTK6DvspxwxgT31znkMTSAxEcCSQAD3RcKYwLEDe9jbHhYlGi5rt8Wrsq3G/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyWJjBvI-SpGUTRKUxA5NXRju77FjYCFYi3r_BhbyRZqRzzMc4nKQDnpvETY1HJD8Qd/exec";
 
 window.onload = () => {
   const fechaInput = document.getElementById("fecha");
@@ -106,4 +106,5 @@ document.getElementById("formularioVigiman").addEventListener("submit", async (e
     alert("Error en el envío");
   }
 });
+
 
