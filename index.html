@@ -1,71 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Supervisión VIGIMAN</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisión VIGIMAN</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main>
-    <h1>Checklist de Supervisión</h1>
+    <h1>Supervisión VIGIMAN</h1>
 
     <form id="supervisionForm">
+        <label>Unidad:</label>
+        <select id="unidad" name="unidad" required></select>
 
-      <div class="form-group">
-        <label for="unidad">Unidad</label>
-        <select id="unidad" name="unidad" required>
-          <option value="">Cargando unidades...</option>
-        </select>
-      </div>
+        <label>Fecha:</label>
+        <input type="text" id="fecha" name="fecha" readonly>
 
-      <div class="form-group">
-        <label for="fechaInicio">Fecha de supervisión</label>
-        <input id="fechaInicio" name="fechaInicio" type="date" readonly required />
-      </div>
+        <label>Hora de inicio:</label>
+        <input type="text" id="horaInicio" name="horaInicio" readonly>
 
-      <div class="form-group">
-        <label for="horaInicio">Hora de inicio</label>
-        <input id="horaInicio" name="horaInicio" type="time" readonly required />
-      </div>
+        <label>Número de VIGIMAN:</label>
+        <input type="number" id="numVigiman" min="1" max="15" required>
 
-      <div class="form-group">
-        <label for="supervisorNombre">Apellidos y nombres del Supervisor</label>
-        <input id="supervisorNombre" name="supervisorNombre" type="text" required />
-      </div>
+        <button type="button" id="generarForm">Generar VIGIMAN</button>
 
-      <div class="form-group">
-        <label for="supervisorDni">DNI del Supervisor</label>
-        <input id="supervisorDni" name="supervisorDni" type="text" required />
-      </div>
+        <div id="vigimanContainer"></div>
 
-      <div class="form-group">
-        <label for="cantidad">Cantidad de VIGIMAN (máx 15)</label>
-        <input id="cantidad" name="cantidad" type="number" min="1" max="15" required />
-        <button type="button" id="btnGenerar">Generar VIGIMAN</button>
-      </div>
+        <label>Ubicación:</label>
+        <input type="text" id="ubicacion" name="ubicacion" readonly>
+        <button type="button" id="btnUbicacion">Obtener ubicación</button>
 
-      <div id="subformularios"></div>
+        <label>Hora fin:</label>
+        <input type="text" id="horaFin" name="horaFin" readonly>
+        <button type="button" id="btnHoraFin">Finalizar Supervisión</button>
 
-      <div class="form-group">
-        <label>Foto de Supervisión (general)</label>
-        <input type="file" name="fotoSupervisionGeneral" accept="image/*" capture="environment" multiple />
-      </div>
-
-      <div class="form-group">
-        <label for="horaFin">Hora de finalización</label>
-        <input id="horaFin" name="horaFin" type="time" readonly />
-        <button type="button" id="btnFinalizar">Finalizar Supervisión</button>
-      </div>
-
-      <div class="actions">
-        <button type="submit" id="btnEnviar">Enviar Supervisión</button>
-      </div>
-
-      <p id="mensaje"></p>
+        <button type="submit">Enviar</button>
     </form>
-  </main>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
