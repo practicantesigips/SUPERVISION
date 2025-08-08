@@ -1,21 +1,15 @@
 body {
   font-family: Arial, sans-serif;
   margin: 20px;
-  background-color: #f4f4f4;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
+  background: #f7f7f7;
 }
 
 form {
-  background: #fff;
+  background: white;
   padding: 20px;
   border-radius: 6px;
-  max-width: 700px;
-  margin: 0 auto;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  max-width: 900px;
+  margin: auto;
 }
 
 label {
@@ -26,46 +20,37 @@ label {
 
 input[type="text"],
 input[type="number"],
+input[type="file"],
+textarea,
 select {
   width: 100%;
-  padding: 8px;
-  margin-top: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 6px;
+  margin-top: 4px;
   box-sizing: border-box;
 }
 
-input[readonly] {
-  background-color: #e9ecef;
-  cursor: not-allowed;
-}
-
 button {
-  width: 100%;
-  background-color: #007BFF;
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: #007bff;
   color: white;
   border: none;
-  margin-top: 15px;
-  padding: 12px;
-  font-size: 16px;
   cursor: pointer;
   border-radius: 4px;
-  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background: #0056b3;
 }
 
 .vigiman-block {
-  border: 1px solid #ccc;
+  background: #eef3f9;
   padding: 15px;
-  margin-top: 20px;
-  background: #fafafa;
-  border-radius: 4px;
+  margin-top: 15px;
+  border-radius: 5px;
+  border: 1px solid #d1d9e6;
 }
 
-.vigiman-block h3 {
-  margin-top: 0;
-  color: #333;
+hr {
+  margin: 20px 0;
 }
