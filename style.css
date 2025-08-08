@@ -25,3 +25,7 @@ input, select, textarea, button {
   padding: 6px;
   font-size: 14px;
 }
+
+button {
+  cursor: pointer;
+}
