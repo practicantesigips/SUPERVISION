@@ -1,38 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Formulario Supervisión VIGIMAN</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supervisión VIGIMAN</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <form id="formulario">
-    <h2>SUPERVISIÓN VIGIMAN</h2>
+  <h1>Formulario de Supervisión VIGIMAN</h1>
 
-    <label for="unidad">Unidad:</label>
-    <select id="unidad" name="unidad" required></select>
+  <form id="formulario-supervision">
+    <label>Unidad:
+      <select id="unidad" name="unidad" required></select>
+    </label>
 
-    <label>Fecha:</label>
-    <input type="date" id="fecha" name="fecha" readonly />
+    <label>Fecha de Supervisión:
+      <input type="date" id="fecha" name="fecha" required>
+    </label>
 
-    <label>Hora de Inicio:</label>
-    <input type="time" id="horaInicio" name="horaInicio" readonly />
+    <label>Hora de Inicio:
+      <input type="time" id="horaInicio" name="horaInicio" required>
+    </label>
 
-    <label for="cantidad">Cantidad de VIGIMAN:</label>
-    <input type="number" id="cantidad" name="cantidad" min="1" max="15" required />
+    <label>Número de VIGIMAN (1-15):
+      <input type="number" id="cantidadVigiman" name="cantidadVigiman" min="1" max="15" required>
+    </label>
 
-    <div id="vigiman-container"></div>
+    <button type="button" onclick="generarSubformularios()">Generar Subformularios</button>
 
-    <label>Ubicación Supervisión:</label>
-    <input type="text" id="ubicacion" name="ubicacion" readonly />
-    <button type="button" onclick="obtenerUbicacion()">Cargar Ubicación</button>
+    <div id="subformularios-container"></div>
 
-    <label>Hora de Fin:</label>
-    <input type="time" id="horaFin" name="horaFin" readonly />
-    <button type="button" onclick="registrarHoraFin()">Finalizar Supervisión</button>
+    <button type="button" onclick="obtenerUbicacion()">Cargar Ubicación</button><br>
+    <label>Ubicación:
+      <input type="text" id="ubicacion" name="ubicacion" readonly>
+    </label><br>
 
-    <button type="submit">Enviar Supervisión</button>
+    <button type="button" onclick="finalizarSupervision()">Finalizar Supervisión</button><br>
+    <label>Hora Fin:
+      <input type="time" id="horaFin" name="horaFin" readonly>
+    </label><br><br>
+
+    <button type="submit">Enviar</button>
   </form>
 
   <script src="script.js"></script>
