@@ -1,27 +1,31 @@
 body {
   font-family: Arial, sans-serif;
-  padding: 20px;
-  max-width: 900px;
-  margin: auto;
+  margin: 15px;
 }
 
 form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-fieldset {
+  max-width: 800px;
+  margin: auto;
+  padding: 15px;
   border: 1px solid #ccc;
-  padding: 12px;
-  margin-top: 12px;
+  border-radius: 8px;
 }
 
-fieldset legend {
+label {
+  display: block;
+  margin-top: 10px;
   font-weight: bold;
 }
 
 input, select, textarea, button {
-  padding: 6px;
-  font-size: 14px;
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+.vigiman-form {
+  margin-top: 20px;
+  border-top: 2px dashed #aaa;
+  padding-top: 10px;
 }
