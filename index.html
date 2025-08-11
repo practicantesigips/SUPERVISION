@@ -1,60 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Supervisión VIGIMAN</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supervisión VIGIMAN</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<h1>Formulario de Supervisión</h1>
+  <h1>Formulario de Supervisión VIGIMAN</h1>
 
-<form id="formVigiman">
+  <form id="supervisionForm">
+    <label>Unidad:</label>
+    <select id="unidad" name="unidad" required></select>
 
-<label>Unidad:</label>
-<select id="unidad" name="unidad"></select><br><br>
+    <label>Fecha:</label>
+    <input type="date" id="fecha" name="fecha" readonly>
 
-<label>Fecha de inicio:</label>
-<input type="date" id="fechaInicio" name="fechaInicio" readonly><br><br>
+    <label>Hora inicio:</label>
+    <input type="time" id="horaInicio" name="horaInicio" readonly>
 
-<label>Hora de inicio:</label>
-<input type="time" id="horaInicio" name="horaInicio" readonly><br><br>
+    <label>Cantidad de VIGIMAN:</label>
+    <input type="number" id="cantidad" min="1" max="15" value="1" required>
 
-<label>DNI:</label>
-<input type="text" id="dni" name="dni" maxlength="8">
-<button type="button" id="btnValidar">VALIDAR DNI</button><br><br>
+    <div id="vigimanContainer"></div>
 
-<label>Nombre:</label>
-<input type="text" id="nombre" name="nombre" readonly><br><br>
+    <button type="button" id="ubicacionBtn">📍 Capturar ubicación</button>
+    <input type="hidden" id="latitud" name="latitud">
+    <input type="hidden" id="longitud" name="longitud">
 
-<label>Estatus SUCAMEC:</label>
-<input type="text" id="sucamec" name="sucamec" readonly><br><br>
+    <label>Hora fin:</label>
+    <input type="time" id="horaFin" name="horaFin" readonly>
+    <button type="button" id="finalizarBtn">Finalizar Supervisión</button>
 
-<label>Capacitaciones:</label>
-<input type="text" id="capacitaciones" name="capacitaciones" readonly><br><br>
+    <button type="submit">Enviar</button>
+  </form>
 
-<label>Fotocheck:</label>
-<input type="text" id="fotocheck" name="fotocheck"><br><br>
-
-<label>Uniforme:</label>
-<input type="text" id="uniforme" name="uniforme"><br><br>
-
-<label>Observaciones:</label>
-<textarea id="observaciones" name="observaciones"></textarea><br><br>
-
-<label>Fotos:</label>
-<input type="file" id="fotos" name="fotos" accept="image/*" multiple><br><br>
-
-<label>Ubicación:</label>
-<input type="text" id="ubicacion" name="ubicacion" readonly><br><br>
-
-<button type="button" id="btnUbicacion">Obtener ubicación</button><br><br>
-
-<button type="button" id="btnFin">Finalizar Supervisión</button><br><br>
-
-<button type="submit">Enviar Supervisión</button>
-
-</form>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
