@@ -1,17 +1,54 @@
-<style>
-  body{font-family:Arial,Helvetica,sans-serif;background:#f3f5f7;margin:0;padding:14px}
-  .wrap{max-width:900px;margin:0 auto;background:#fff;padding:18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-  h1{margin:0 0 12px;font-size:20px}
-  label{display:block;margin-top:12px;font-weight:600}
-  input[type=text], input[type=date], input[type=time], select, textarea, input[type=number]{
-    width:100%;padding:8px;border-radius:6px;border:1px solid #ccc;box-sizing:border-box;margin-top:6px;
-  }
-  .row{display:flex;gap:8px;align-items:center;margin-top:12px}
-  .row input[type=text]{flex:1}
-  button{background:#007bff;color:#fff;padding:10px 12px;border-radius:6px;border:none;cursor:pointer}
-  button:disabled{opacity:.6;cursor:not-allowed}
-  .vigiman-card{margin-top:12px;padding:12px;border-radius:8px;background:#fafafa;border:1px solid #e0e0e0}
-  .vigiman-row{display:flex;gap:8px;align-items:center}
-  .small{width:120px}
-  .msg{margin-top:12px;font-weight:600}
-</style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f7f9fc;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #0056b3;
+}
+
+form {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input, select, textarea, button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.vigiman-block {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 8px;
+  background-color: #f1f1f1;
+}
