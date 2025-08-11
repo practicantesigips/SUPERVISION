@@ -1,6 +1,6 @@
 // ---------- CONFIG ----------
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTMnyquRcVFWwJgETIp4kOW3F4U0o1aDCS4KK76jYSdoLMdzbAu-VmZRilwUneR4Xjh4GLqLPh5ALfO/pub?output=csv";
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbySA5YLyAgE8BwCQzE8t8Cm2Cb6W6YUjDnUxN3Yi8eXFZ5hh8wZAoEV10xXeeChhco2/exec"; // <--- cambia esto
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyFkGIQ3rX7Zxx-CYMc1KQXBHLNUgjyX1QuRo4Zo55wuPaDR6WCRKVgyoVEiko2FbR_/exec"; // <--- cambia esto
 
 // ---------- UTIL: parse CSV robusto (maneja comillas) ----------
 function parseCSV(text) {
@@ -285,7 +285,6 @@ formEl.addEventListener('submit', async (ev)=>{
 
   btnEnviar.disabled = false;
 });
-
 
 
 
