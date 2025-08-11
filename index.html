@@ -1,39 +1,62 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Supervisión VIGIMAN</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Formulario de Supervisión VIGIMAN</h1>
+  <main>
+    <h1>Supervisión VIGIMAN</h1>
 
-  <form id="supervisionForm">
-    <label>Unidad:</label>
-    <select id="unidad" name="unidad" required></select>
+    <form id="form">
+      <section>
+        <label>Fecha (inicio)</label>
+        <input type="date" id="fechaInicio" name="fechaInicio" readonly />
 
-    <label>Fecha:</label>
-    <input type="date" id="fecha" name="fecha" readonly>
+        <label>Hora (inicio)</label>
+        <input type="time" id="horaInicio" name="horaInicio" readonly />
 
-    <label>Hora inicio:</label>
-    <input type="time" id="horaInicio" name="horaInicio" readonly>
+        <label>Apellidos y Nombres del Supervisor</label>
+        <input type="text" id="nombreSupervisor" name="nombreSupervisor" required />
 
-    <label>Cantidad de VIGIMAN:</label>
-    <input type="number" id="cantidad" min="1" max="15" value="1" required>
+        <label>DNI del Supervisor</label>
+        <input type="text" id="dniSupervisor" name="dniSupervisor" maxlength="8" required />
 
-    <div id="vigimanContainer"></div>
+        <label>Unidad</label>
+        <select id="unidad" name="unidad" required>
+          <option value="">Cargando unidades...</option>
+        </select>
 
-    <button type="button" id="ubicacionBtn">📍 Capturar ubicación</button>
-    <input type="hidden" id="latitud" name="latitud">
-    <input type="hidden" id="longitud" name="longitud">
+        <label>N° de agentes VIGIMAN (1–20)</label>
+        <input type="number" id="numVigiman" name="numVigiman" min="1" max="20" value="1" required />
+        <button type="button" id="btnGenerar">Generar subformularios</button>
+      </section>
 
-    <label>Hora fin:</label>
-    <input type="time" id="horaFin" name="horaFin" readonly>
-    <button type="button" id="finalizarBtn">Finalizar Supervisión</button>
+      <section id="vigimanContainer"></section>
 
-    <button type="submit">Enviar</button>
-  </form>
+      <section>
+        <label>Ubicación (link)</label>
+        <input type="text" id="ubicacionLink" name="ubicacionLink" readonly />
+        <div style="display:flex; gap:8px;">
+          <button type="button" id="btnUbicacion">Obtener ubicación</button>
+        </div>
+
+        <label>Fotos de Supervisión (múltiples)</label>
+        <input type="file" id="fotosSupervision" name="fotosSupervision" accept="image/*" multiple />
+
+        <label>Hora de fin</label>
+        <input type="time" id="horaFin" name="horaFin" readonly />
+        <button type="button" id="btnHoraFin">Poner hora actual</button>
+      </section>
+
+      <div style="margin-top:12px;">
+        <button type="submit" id="btnEnviar">Enviar Supervisión</button>
+        <span id="status" aria-live="polite"></span>
+      </div>
+    </form>
+  </main>
 
   <script src="script.js"></script>
 </body>
