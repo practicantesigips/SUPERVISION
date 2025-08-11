@@ -1,39 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supervisión VIGIMAN</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Checklist Supervisión VIGIMAN</title>
+  <?!= HtmlService.createHtmlOutputFromFile('style').getContent(); ?>
 </head>
 <body>
-    <h1>Formulario de Supervisión VIGIMAN</h1>
+  <div class="wrap">
+    <h1>Supervisión VIGIMAN</h1>
 
-    <form id="supervisionForm">
-        <label for="unidad">Unidad:</label>
-        <select id="unidad" name="unidad" required></select>
+    <form id="mainForm">
 
-        <label for="fechaInicio">Fecha de Supervisión:</label>
-        <input type="text" id="fechaInicio" name="fechaInicio" readonly>
+      <label>Unidad</label>
+      <select id="unidad" name="unidad" required></select>
 
-        <label for="horaInicio">Hora de Inicio:</label>
-        <input type="text" id="horaInicio" name="horaInicio" readonly>
+      <label>Fecha de supervisión</label>
+      <input type="date" id="fechaInicio" name="fechaInicio" readonly>
 
-        <label for="numVigiman">Número de VIGIMAN:</label>
-        <input type="number" id="numVigiman" name="numVigiman" min="1" max="15" required>
+      <label>Hora de inicio</label>
+      <input type="time" id="horaInicio" name="horaInicio" readonly>
 
-        <div id="vigimanContainer"></div>
+      <label>Nombre del Supervisor</label>
+      <input type="text" id="supervisorNombre" name="supervisorNombre" required>
 
-        <button type="button" id="btnUbicacion">Cargar Ubicación</button>
-        <input type="hidden" id="ubicacion" name="ubicacion">
+      <label>DNI del Supervisor</label>
+      <input type="text" id="supervisorDni" name="supervisorDni" required>
 
-        <label for="horaFin">Hora de Fin:</label>
-        <input type="text" id="horaFin" name="horaFin" readonly>
-        <button type="button" id="btnFin">Finalizar Supervisión</button>
+      <label>Cantidad de VIGIMAN (máx 20)</label>
+      <input type="number" id="numVigiman" name="numVigiman" min="1" max="20" value="1">
 
-        <button type="submit">Enviar</button>
+      <button type="button" id="generarBtn">GENERAR CAMPOS</button>
+
+      <div id="vigimanContainer"></div>
+
+      <div class="row">
+        <button type="button" id="ubicacionBtn">📍 Cargar Ubicación</button>
+        <input type="text" id="ubicacion" name="ubicacion" placeholder="Lat,Lng" readonly>
+      </div>
+
+      <label>Foto de Supervisión (puede tomar o subir varias)</label>
+      <input type="file" id="fotosSupervision" name="fotosSupervision" accept="image/*" capture="environment" multiple>
+
+      <div class="row">
+        <button type="button" id="finalizarBtn">Finalizar Supervisión (marcar hora fin)</button>
+        <input type="time" id="horaFin" name="horaFin" readonly>
+      </div>
+
+      <button type="submit" id="enviarBtn">Enviar Supervisión</button>
+
+      <p id="msg" class="msg"></p>
     </form>
+  </div>
 
-    <script src="script.js"></script>
+  <script>
+    // Inyecta el script cliente que está en archivo Script (Apps Script will serve it)
+  </script>
+  <?!= HtmlService.createHtmlOutputFromFile('script').getContent(); ?>
 </body>
 </html>
