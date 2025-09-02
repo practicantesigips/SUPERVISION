@@ -139,28 +139,47 @@ function generarSubformularios() {
 
 // ---------- Validar DNI (usa baseDatos cargado) ----------
 function validateDniByIndex(i){
-  const dniEl = document.getElementById(`dni_${i}`);
-  if (!dniEl) return;
+  const idx = Number(i);
+  const dniEl = document.getElementById(`dni_${idx}`);
+  const nombreEl = document.getElementById(`nombre_${idx}`);
+  const estatusEl = document.getElementById(`estatus_${idx}`);
+  const capacEl = document.getElementById(`capacitaciones_${idx}`);
+  if (!dniEl || !nombreEl || !estatusEl || !capacEl) return;
+
   const dni = (dniEl.value||'').trim();
-  if (!dni) { alert('Ingrese DNI'); return; }
+  if (!dni) { alert('Ingrese DNI'); dniEl.focus(); return; }
+
   const found = baseDatos.find(b => b.dni === dni);
   if (found) {
-    document.getElementById(`nombre_${i}`).value = found.nombre;
-    document.getElementById(`estatus_${i}`).value = found.estatus;
-    document.getElementById(`capacitaciones_${i}`).value = found.capacitaciones;
+    // rellenar automático
+    nombreEl.value = found.nombre;
+    estatusEl.value = found.estatus;
+    capacEl.value = found.capacitaciones;
+    nombreEl.readOnly = true;
+    estatusEl.readOnly = true;
+    capacEl.readOnly = true;
   } else {
-    // no encontrado: dejar escribir manualmente (según tu requerimiento)
-    // opcional: confirmar si quiere agregar manualmente
+    // desbloquear campos para escritura manual
+    nombreEl.readOnly = false;
+    estatusEl.readOnly = false;
+    capacEl.readOnly = false;
+
     if (!confirm('DNI no encontrado en la base. ¿Desea continuar y escribir datos manualmente?')) {
       dniEl.focus();
-    } else {
-      // permitir edición manual: habilitar campos
-      document.getElementById(`nombre_${i}`).readOnly = false;
-      document.getElementById(`estatus_${i}`).readOnly = false;
-      document.getElementById(`capacitaciones_${i}`).readOnly = false;
     }
   }
+
+  // event listener adicional en blur para desbloquear manual
+  dniEl.addEventListener('blur', () => {
+    const f = baseDatos.find(b => b.dni === dniEl.value.trim());
+    if (!f) {
+      nombreEl.readOnly = false;
+      estatusEl.readOnly = false;
+      capacEl.readOnly = false;
+    }
+  });
 }
+
 
 // ---------- Ubicación ----------
 btnUbicacionEl.addEventListener('click', ()=> {
@@ -285,6 +304,7 @@ formEl.addEventListener('submit', async (ev)=>{
 
   btnEnviar.disabled = false;
 });
+
 
 
 
