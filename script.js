@@ -1,4 +1,3 @@
-
 // ---------- CONFIG ----------
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQgz6omCPBYU-bB2D5dSS-O3bvumI2CRFDdm5NyNQz_i6N1hN4RqRnixq-XM_y6Ecb8oSIU10xmLgxU/pub?gid=0&single=true&output=csv";
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwTdS8NRuStM2e8ecORJUsI8mHx0oVIVBp0ao9LBJBUOi299BD6ZSySEay4VldGXhXRqA/exec";
@@ -231,7 +230,7 @@ formEl.addEventListener('submit', async (ev) => {
     Array.from(fotosSupervisionEl.files).forEach((f, i) => fd.append(`supervisionPhotos_${i}`, f));
 
     const n = Math.max(0, Math.min(20, Number(numVigimanEl.value || 0)));
-fd.append('vigimansCount', n); // 🔹 enviamos la cantidad de agentes
+    fd.append('vigimansCount', n); // 👈 ahora se envía al servidor
 
     for (let i = 1; i <= n; i++) {
       fd.append(`dni_${i}`, document.getElementById(`dni_${i}`).value);
@@ -273,5 +272,3 @@ fd.append('vigimansCount', n); // 🔹 enviamos la cantidad de agentes
   }
   btnEnviarEl.disabled = false;
 });
-
-
