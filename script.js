@@ -2,67 +2,6 @@
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQgz6omCPBYU-bB2D5dSS-O3bvumI2CRFDdm5NyNQz_i6N1hN4RqRnixq-XM_y6Ecb8oSIU10xmLgxU/pub?gid=0&single=true&output=csv";
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwTdS8NRuStM2e8ecORJUsI8mHx0oVIVBp0ao9LBJBUOi299BD6ZSySEay4VldGXhXRqA/exec";
 
-// ---------- UTIL: parse CSV ----------
-function parseCSV(text) {
-  const rows = [];
-  let cur = '';
-  let row = [];
-  let i = 0;
-  let inQuotes = false;
-  while (i < text.length) {
-    const ch = text[i];
-    if (inQuotes) {
-      if (ch === '"') {
-        if (text[i + 1] === '"') {
-          cur += '"';
-          i += 2;
-          continue;
-        }
-        inQuotes = false;
-        i++;
-        continue;
-      }
-      cur += ch;
-      i++;
-      continue;
-    }
-    if (ch === '"') {
-      inQuotes = true;
-      i++;
-      continue;
-    }
-    if (ch === ',') {
-      row.push(cur);
-      cur = '';
-      i++;
-      continue;
-    }
-    if (ch === '\r') {
-      i++;
-      continue;
-    }
-    if (ch === '\n') {
-      row.push(cur);
-      rows.push(row);
-      row = [];
-      cur = '';
-      i++;
-      continue;
-    }
-    cur += ch;
-    i++;
-  }
-  if (cur !== '' || row.length) {
-    row.push(cur);
-    rows.push(row);
-  }
-  return rows;
-}
-
-// ---------- Estado local ----------
-let baseDatos = [];
-let unidades = [];
-
 // ---------- DOM elements ----------
 const fechaInicioEl = document.getElementById('fechaInicio');
 const horaInicioEl = document.getElementById('horaInicio');
@@ -82,43 +21,16 @@ const statusEl = document.getElementById('status');
 const btnEnviarEl = document.getElementById('btnEnviar');
 
 // ---------- Inicialización ----------
-window.addEventListener('load', async () => {
+window.addEventListener('load', () => {
   const now = new Date();
   fechaInicioEl.value = now.toISOString().slice(0, 10);
   horaInicioEl.value = now.toTimeString().slice(0, 5);
-
-  try {
-    const res = await fetch(CSV_URL);
-    const txt = await res.text();
-    const rows = parseCSV(txt);
-    baseDatos = rows.slice(1).map(r => ({
-      dni: (r[0] || '').toString().trim(),
-      nombre: (r[1] || '').toString().trim(),
-      estatus: (r[2] || '').toString().trim(),
-      capacitaciones: (r[3] || '').toString().trim(),
-      unidad: (r[4] || '').toString().trim()
-    }));
-
-    const uSet = new Set();
-    baseDatos.forEach(b => { if (b.unidad) uSet.add(b.unidad); });
-    unidades = [...uSet].sort();
-
-    unidadEl.innerHTML = '<option value="">--Seleccione Unidad--</option>';
-    unidades.forEach(u => {
-      const o = document.createElement('option');
-      o.value = u;
-      o.textContent = u;
-      unidadEl.appendChild(o);
-    });
-  } catch (err) {
-    console.error('Error cargando CSV:', err);
-    unidadEl.innerHTML = '<option value="">(error cargando unidades)</option>';
-  }
   generarSubformularios();
 });
 
 // ---------- Generar subformularios ----------
 btnGenerarEl.addEventListener('click', generarSubformularios);
+
 function generarSubformularios() {
   const n = Math.max(1, Math.min(20, Number(numVigimanEl.value || 1)));
   vigimanContainerEl.innerHTML = '';
@@ -127,60 +39,18 @@ function generarSubformularios() {
     div.className = 'vigiman-block';
     div.innerHTML = `
       <h3>VIGIMAN ${i}</h3>
-      <div class="small-row">
-        <div><label>DNI</label><input type="text" name="dni_${i}" id="dni_${i}" maxlength="8"></div>
-        <div style="align-self:end;"><button type="button" data-validate="${i}" class="btn-validate">Validar DNI</button></div>
-      </div>
+      <label>DNI</label><input type="text" name="dni_${i}" id="dni_${i}" maxlength="8">
       <label>Nombre</label><input type="text" name="nombre_${i}" id="nombre_${i}" readonly>
       <label>Estatus SUCAMEC</label><input type="text" name="estatus_${i}" id="estatus_${i}" readonly>
       <label>N° Capacitaciones</label><input type="text" name="capacitaciones_${i}" id="capacitaciones_${i}" readonly>
       <label>Fotocheck (texto)</label><input type="text" name="fotocheck_text_${i}" id="fotocheck_text_${i}">
-      <label>Fotocheck (fotos múltiples)</label><input type="file" name="fotocheck_files_${i}" id="fotocheck_files_${i}" accept="image/*" multiple>
+      <label>Fotocheck (fotos)</label><input type="file" name="fotocheckFiles_${i}_0" id="fotocheck_files_${i}" accept="image/*" multiple>
       <label>Uniforme (texto)</label><input type="text" name="uniforme_text_${i}" id="uniforme_text_${i}">
-      <label>Uniforme (fotos múltiples)</label><input type="file" name="uniforme_files_${i}" id="uniforme_files_${i}" accept="image/*" multiple>
+      <label>Uniforme (fotos)</label><input type="file" name="uniformeFiles_${i}_0" id="uniforme_files_${i}" accept="image/*" multiple>
       <label>Observaciones (texto)</label><textarea name="obs_text_${i}" id="obs_text_${i}"></textarea>
-      <label>Observaciones (fotos múltiples)</label><input type="file" name="obs_files_${i}" id="obs_files_${i}" accept="image/*" multiple>
+      <label>Observaciones (fotos)</label><input type="file" name="obsFiles_${i}_0" id="obs_files_${i}" accept="image/*" multiple>
     `;
     vigimanContainerEl.appendChild(div);
-    div.querySelector('.btn-validate').addEventListener('click', () => validateDniByIndex(i));
-    div.querySelector(`#dni_${i}`).addEventListener('blur', () => {
-      const dniVal = div.querySelector(`#dni_${i}`).value.trim();
-      const f = baseDatos.find(b => b.dni === dniVal);
-      if (!f) {
-        div.querySelector(`#nombre_${i}`).readOnly = false;
-        div.querySelector(`#estatus_${i}`).readOnly = false;
-        div.querySelector(`#capacitaciones_${i}`).readOnly = false;
-      }
-    });
-  }
-}
-
-// ---------- Validar DNI ----------
-function validateDniByIndex(i) {
-  const dniEl = document.getElementById(`dni_${i}`);
-  const nombreEl = document.getElementById(`nombre_${i}`);
-  const estatusEl = document.getElementById(`estatus_${i}`);
-  const capacEl = document.getElementById(`capacitaciones_${i}`);
-  if (!dniEl || !nombreEl || !estatusEl || !capacEl) return;
-  const dni = (dniEl.value || '').trim();
-  if (!dni) {
-    alert('Ingrese DNI');
-    dniEl.focus();
-    return;
-  }
-  const found = baseDatos.find(b => b.dni === dni);
-  if (found) {
-    nombreEl.value = found.nombre;
-    estatusEl.value = found.estatus;
-    capacEl.value = found.capacitaciones;
-    nombreEl.readOnly = true;
-    estatusEl.readOnly = true;
-    capacEl.readOnly = true;
-  } else {
-    nombreEl.readOnly = false;
-    estatusEl.readOnly = false;
-    capacEl.readOnly = false;
-    if (!confirm('DNI no encontrado en la base. ¿Desea continuar manualmente?')) dniEl.focus();
   }
 }
 
@@ -192,8 +62,7 @@ btnUbicacionEl.addEventListener('click', () => {
   navigator.geolocation.getCurrentPosition(pos => {
     const lat = pos.coords.latitude.toFixed(6);
     const lon = pos.coords.longitude.toFixed(6);
-    const url = `https://maps.google.com/?q=${lat},${lon}`;
-    ubicacionLinkEl.value = url;
+    ubicacionLinkEl.value = `https://maps.google.com/?q=${lat},${lon}`;
     ubicacionLinkEl.dataset.lat = lat;
     ubicacionLinkEl.dataset.lon = lon;
     statusEl.textContent = 'Ubicación cargada';
@@ -210,11 +79,12 @@ btnHoraFinEl.addEventListener('click', () => {
   horaFinEl.value = new Date().toTimeString().slice(0, 5);
 });
 
-// ---------- Form submit (FormData) ----------
+// ---------- Enviar formulario ----------
 formEl.addEventListener('submit', async (ev) => {
   ev.preventDefault();
   btnEnviarEl.disabled = true;
   statusEl.textContent = 'Preparando datos...';
+
   try {
     const fd = new FormData();
     fd.append('fecha', fechaInicioEl.value);
@@ -227,10 +97,11 @@ formEl.addEventListener('submit', async (ev) => {
     fd.append('nombreSupervisor', nombreSupervisorEl.value);
     fd.append('dniSupervisor', dniSupervisorEl.value);
 
+    // Fotos de supervisión
     Array.from(fotosSupervisionEl.files).forEach((f, i) => fd.append(`supervisionPhotos_${i}`, f));
 
     const n = Math.max(0, Math.min(20, Number(numVigimanEl.value || 0)));
-    fd.append('vigimansCount', n); // 👈 ahora se envía al servidor
+    fd.append('vigimansCount', n);
 
     for (let i = 1; i <= n; i++) {
       fd.append(`dni_${i}`, document.getElementById(`dni_${i}`).value);
@@ -239,6 +110,7 @@ formEl.addEventListener('submit', async (ev) => {
       fd.append(`capacitaciones_${i}`, document.getElementById(`capacitaciones_${i}`).value);
       fd.append(`fotocheck_text_${i}`, document.getElementById(`fotocheck_text_${i}`).value);
 
+      // Fotocheck archivos
       Array.from(document.getElementById(`fotocheck_files_${i}`).files)
         .forEach((f, j) => fd.append(`fotocheckFiles_${i}_${j}`, f));
 
@@ -254,6 +126,7 @@ formEl.addEventListener('submit', async (ev) => {
     statusEl.textContent = 'Enviando al servidor...';
     const resp = await fetch(WEBAPP_URL, { method: 'POST', body: fd });
     const json = await resp.json();
+
     if (json.status === 'OK') {
       alert('Supervisión enviada con éxito');
       formEl.reset();
@@ -270,6 +143,9 @@ formEl.addEventListener('submit', async (ev) => {
     console.error(err);
     statusEl.textContent = 'Error';
   }
+
   btnEnviarEl.disabled = false;
 });
+
+
 
