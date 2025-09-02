@@ -1,7 +1,7 @@
 
 // ---------- CONFIG ----------
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQgz6omCPBYU-bB2D5dSS-O3bvumI2CRFDdm5NyNQz_i6N1hN4RqRnixq-XM_y6Ecb8oSIU10xmLgxU/pub?gid=0&single=true&output=csv";
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbztSW8DyGWuxOS0H57NvLgWTqpdcW835Kcm34igzNVot7luH9M7sDA-RYa3nuPI2I1SZQ/exec";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwTdS8NRuStM2e8ecORJUsI8mHx0oVIVBp0ao9LBJBUOi299BD6ZSySEay4VldGXhXRqA/exec";
 
 // ---------- UTIL: parse CSV ----------
 function parseCSV(text) {
@@ -271,3 +271,4 @@ formEl.addEventListener('submit', async (ev) => {
   }
   btnEnviarEl.disabled = false;
 });
+
