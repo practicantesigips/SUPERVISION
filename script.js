@@ -231,6 +231,8 @@ formEl.addEventListener('submit', async (ev) => {
     Array.from(fotosSupervisionEl.files).forEach((f, i) => fd.append(`supervisionPhotos_${i}`, f));
 
     const n = Math.max(0, Math.min(20, Number(numVigimanEl.value || 0)));
+fd.append('vigimansCount', n); // 🔹 enviamos la cantidad de agentes
+
     for (let i = 1; i <= n; i++) {
       fd.append(`dni_${i}`, document.getElementById(`dni_${i}`).value);
       fd.append(`nombre_${i}`, document.getElementById(`nombre_${i}`).value);
@@ -271,4 +273,5 @@ formEl.addEventListener('submit', async (ev) => {
   }
   btnEnviarEl.disabled = false;
 });
+
 
