@@ -61,11 +61,11 @@ window.addEventListener('load', async () => {
     const txt = await res.text();
     const rows = parseCSV(txt);
     baseDatos = rows.slice(1).map(r => ({
-      dni: (r[0]||'').toString().trim(),
-      nombre: (r[1]||'').toString().trim(),
-      estatus: (r[2]||'').toString().trim(),
-      capacitaciones: (r[3]||'').toString().trim(),
-      unidad: (r[4]||'').toString().trim()
+      dni: (r[0]||'').trim(),
+      nombre: (r[1]||'').trim(),
+      estatus: (r[2]||'').trim(),
+      capacitaciones: (r[3]||'').trim(),
+      unidad: (r[4]||'').trim()
     }));
     const uSet = new Set();
     baseDatos.forEach(b => { if(b.unidad) uSet.add(b.unidad); });
@@ -94,59 +94,18 @@ function generarSubformularios(){
     div.className='vigiman-block';
     div.innerHTML=`
       <h3>VIGIMAN ${i}</h3>
-      <div class="small-row">
-        <div><label>DNI</label><input type="text" name="dni_${i}" id="dni_${i}" maxlength="8"></div>
-        <div style="align-self:end;"><button type="button" data-validate="${i}" class="btn-validate">Validar DNI</button></div>
-      </div>
+      <label>DNI</label><input type="text" name="dni_${i}" id="dni_${i}" maxlength="8">
       <label>Nombre</label><input type="text" name="nombre_${i}" id="nombre_${i}" readonly>
       <label>Estatus SUCAMEC</label><input type="text" name="estatus_${i}" id="estatus_${i}" readonly>
       <label>N° Capacitaciones</label><input type="text" name="capacitaciones_${i}" id="capacitaciones_${i}" readonly>
-      <label>Fotocheck (texto)</label><input type="text" name="fotocheck_text_${i}" id="fotocheck_text_${i}">
-      <label>Fotocheck (fotos múltiples)</label><input type="file" name="fotocheck_files_${i}" id="fotocheck_files_${i}" accept="image/*" multiple>
-      <label>Uniforme (texto)</label><input type="text" name="uniforme_text_${i}" id="uniforme_text_${i}">
-      <label>Uniforme (fotos múltiples)</label><input type="file" name="uniforme_files_${i}" id="uniforme_files_${i}" accept="image/*" multiple>
-      <label>Observaciones (texto)</label><textarea name="obs_text_${i}" id="obs_text_${i}"></textarea>
-      <label>Observaciones (fotos múltiples)</label><input type="file" name="obs_files_${i}" id="obs_files_${i}" accept="image/*" multiple>
+      <label>Fotocheck (texto)</label><input type="text" name="fotocheckText_${i}" id="fotocheckText_${i}">
+      <label>Fotocheck (fotos múltiples)</label><input type="file" name="fotocheckFiles_${i}" id="fotocheckFiles_${i}" accept="image/*" multiple>
+      <label>Uniforme (texto)</label><input type="text" name="uniformeText_${i}" id="uniformeText_${i}">
+      <label>Uniforme (fotos múltiples)</label><input type="file" name="uniformeFiles_${i}" id="uniformeFiles_${i}" accept="image/*" multiple>
+      <label>Observaciones (texto)</label><textarea name="obsText_${i}" id="obsText_${i}"></textarea>
+      <label>Observaciones (fotos múltiples)</label><input type="file" name="obsFiles_${i}" id="obsFiles_${i}" accept="image/*" multiple>
     `;
     vigimanContainerEl.appendChild(div);
-
-    div.querySelector('.btn-validate').addEventListener('click',()=>validateDniByIndex(i));
-    div.querySelector(`#dni_${i}`).addEventListener('blur',()=>{
-      const dniVal=div.querySelector(`#dni_${i}`).value.trim();
-      const f=baseDatos.find(b=>b.dni===dniVal);
-      if(!f){
-        div.querySelector(`#nombre_${i}`).readOnly=false;
-        div.querySelector(`#estatus_${i}`).readOnly=false;
-        div.querySelector(`#capacitaciones_${i}`).readOnly=false;
-      }
-    });
-  }
-}
-
-// ---------- Validar DNI ----------
-function validateDniByIndex(i){
-  const dniEl=document.getElementById(`dni_${i}`);
-  const nombreEl=document.getElementById(`nombre_${i}`);
-  const estatusEl=document.getElementById(`estatus_${i}`);
-  const capacEl=document.getElementById(`capacitaciones_${i}`);
-  if(!dniEl || !nombreEl || !estatusEl || !capacEl) return;
-
-  const dni=(dniEl.value||'').trim();
-  if(!dni){ alert('Ingrese DNI'); dniEl.focus(); return; }
-
-  const found=baseDatos.find(b=>b.dni===dni);
-  if(found){
-    nombreEl.value=found.nombre;
-    estatusEl.value=found.estatus;
-    capacEl.value=found.capacitaciones;
-    nombreEl.readOnly=true;
-    estatusEl.readOnly=true;
-    capacEl.readOnly=true;
-  } else {
-    nombreEl.readOnly=false;
-    estatusEl.readOnly=false;
-    capacEl.readOnly=false;
-    if(!confirm('DNI no encontrado en la base. ¿Desea continuar manualmente?')) dniEl.focus();
   }
 }
 
@@ -174,7 +133,7 @@ btnUbicacionEl.addEventListener('click',()=>{
 // ---------- Hora fin ----------
 btnHoraFinEl.addEventListener('click',()=>{ horaFinEl.value=new Date().toTimeString().slice(0,5); });
 
-// ---------- Form submit (FormData) ----------
+// ---------- Form submit ----------
 formEl.addEventListener('submit',async(ev)=>{
   ev.preventDefault();
   btnEnviarEl.disabled=true;
@@ -195,19 +154,20 @@ formEl.addEventListener('submit',async(ev)=>{
     Array.from(fotosSupervisionEl.files).forEach((f,i)=>fd.append(`supervisionPhotos_${i}`,f));
 
     const n=Math.max(0,Math.min(20,Number(numVigimanEl.value||0)));
+    fd.append('vigimansCount', n);
     for(let i=1;i<=n;i++){
       fd.append(`dni_${i}`,document.getElementById(`dni_${i}`).value);
       fd.append(`nombre_${i}`,document.getElementById(`nombre_${i}`).value);
       fd.append(`estatus_${i}`,document.getElementById(`estatus_${i}`).value);
       fd.append(`capacitaciones_${i}`,document.getElementById(`capacitaciones_${i}`).value);
-      fd.append(`fotocheck_text_${i}`,document.getElementById(`fotocheck_text_${i}`).value);
-      Array.from(document.getElementById(`fotocheck_files_${i}`).files)
+      fd.append(`fotocheckText_${i}`,document.getElementById(`fotocheckText_${i}`).value);
+      Array.from(document.getElementById(`fotocheckFiles_${i}`).files)
            .forEach((f,j)=>fd.append(`fotocheckFiles_${i}_${j}`,f));
-      fd.append(`uniforme_text_${i}`,document.getElementById(`uniforme_text_${i}`).value);
-      Array.from(document.getElementById(`uniforme_files_${i}`).files)
+      fd.append(`uniformeText_${i}`,document.getElementById(`uniformeText_${i}`).value);
+      Array.from(document.getElementById(`uniformeFiles_${i}`).files)
            .forEach((f,j)=>fd.append(`uniformeFiles_${i}_${j}`,f));
-      fd.append(`obs_text_${i}`,document.getElementById(`obs_text_${i}`).value);
-      Array.from(document.getElementById(`obs_files_${i}`).files)
+      fd.append(`obsText_${i}`,document.getElementById(`obsText_${i}`).value);
+      Array.from(document.getElementById(`obsFiles_${i}`).files)
            .forEach((f,j)=>fd.append(`obsFiles_${i}_${j}`,f));
     }
 
