@@ -93,6 +93,7 @@ btnGenerarEl.addEventListener('click', generarSubformularios);
 function generarSubformularios() {
   const n = Math.max(1, Math.min(20, Number(numVigimanEl.value || 1)));
   vigimanContainerEl.innerHTML = '';
+
   for (let i=1;i<=n;i++){
     const div = document.createElement('div');
     div.className = 'vigiman-block';
@@ -120,22 +121,23 @@ function generarSubformularios() {
       <label>Observaciones (fotos múltiples)</label><input type="file" name="obs_files_${i}" id="obs_files_${i}" accept="image/*" multiple>
     `;
     vigimanContainerEl.appendChild(div);
-  }
 
-  // attach event listeners for validate buttons
-  document.querySelectorAll('.btn-validate').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const idx = btn.getAttribute('data-validate');
-      validateDniByIndex(idx);
+    // **evento del botón validar**
+    div.querySelector('.btn-validate').addEventListener('click', () => validateDniByIndex(i));
+
+    // **evento blur para desbloquear manual**
+    div.querySelector(`#dni_${i}`).addEventListener('blur', () => {
+      const dniVal = div.querySelector(`#dni_${i}`).value.trim();
+      const f = baseDatos.find(b => b.dni === dniVal);
+      if (!f) {
+        div.querySelector(`#nombre_${i}`).readOnly = false;
+        div.querySelector(`#estatus_${i}`).readOnly = false;
+        div.querySelector(`#capacitaciones_${i}`).readOnly = false;
+      }
     });
-  });
-
-  // also allow blur validation
-  for (let i=1;i<=n;i++){
-    const el = document.getElementById(`dni_${i}`);
-    if (el) el.addEventListener('blur', ()=>validateDniByIndex(i));
   }
 }
+
 
 // ---------- Validar DNI (usa baseDatos cargado) ----------
 function validateDniByIndex(i){
@@ -304,6 +306,7 @@ formEl.addEventListener('submit', async (ev)=>{
 
   btnEnviar.disabled = false;
 });
+
 
 
 
